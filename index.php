@@ -1,16 +1,18 @@
 <?php
 
-require_once __DIR__ . '/TinyApiHelper/tiny.php';
+require_once 'router/router.php';
 
-$api = new TinyAPI([
-    'host' => 'localhost',
-    'dbname' => 'expoplay',
-    'user' => 'root',
-    'pass' => ''
-]);
+$basePath = '/ExpoPlayAPI';
 
-$api->registerRoute('GET', '/ExpoPlayAPI/index.php/test', function() use ($api) {
-    return "Hello, world!";
+$router = new Router($basePath);
+
+$router->addRoute('GET', '/api/users', function() {
+    echo json_encode(['users' => ['Test', 'Test2', 'Test3']]);
 });
 
-$api->run();
+$router->addRoute('POST', '/api/users', function() {
+    $data = json_decode(file_get_contents('php://input'), true);
+    echo json_encode(['message' => 'User created', 'data' => $data]);
+});
+
+$router->dispatch();
