@@ -1,6 +1,6 @@
 <?php
 
-require_once 'router/router.php';
+require_once 'src/router.php';
 
 $basePath = '/ExpoPlayAPI';
 
