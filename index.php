@@ -1,10 +1,10 @@
 <?php
 
 require_once 'src/router.php';
+require_once 'src/config.php';
 
-$basePath = '/ExpoPlayAPI';
-
-$router = new Router($basePath);
+$config = new Config('config.ini');
+$router = new Router($config->get('base_path'));
 
 $router->addRoute('GET', '/api/users', function() {
     echo json_encode(['users' => ['Test', 'Test2', 'Test3']]);
