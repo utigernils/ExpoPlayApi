@@ -24,20 +24,46 @@ $db = new db(
     pass:$config->get('db_pass')
 );
 
-function login() {
-    return true;
+function setNumber($number) {
+    global $session;
+    $session->set('number', intval($number)); 
+    echo json_encode(['New number' => $session->get('number')]);
 }
 
-function testResponse() {
-    echo json_encode(['Hello' => 'World']);
+function getNumber() {
+    global $session;
+    echo json_encode(['Number' => $session->get('number')]);
+}
+
+function clearSession() {
+    global $session;
+    $session->clear();
+    echo json_encode(['Session state'=> 'cleared']);
 }
 
 $router->addRoute(
     method: 'GET', 
-    path: '/test', 
-    callback: 'testResponse',
-    permissionCallback: 'login', 
-    loginCallback:'login'
+    path: '/setNumber/{number}', 
+    callback: 'setNumber',
+    permissionCallback: true, 
+    loginCallback: true
 );  
+
+$router->addRoute(
+    method: 'GET', 
+    path: '/getNumber', 
+    callback: 'getNumber',
+    permissionCallback: true, 
+    loginCallback: true
+);  
+
+$router->addRoute(
+    method: 'GET', 
+    path: '/clearSession', 
+    callback: 'clearSession',
+    permissionCallback: true, 
+    loginCallback: true
+);  
+
 
 $router->dispatch();

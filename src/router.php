@@ -23,6 +23,26 @@ class Router {
         ];
     }
 
+    private function matchRoute($routePath, $requestUri) {
+        $routeParts = explode('/', trim($routePath, '/'));
+        $requestParts = explode('/', trim($requestUri, '/'));
+
+        if (count($routeParts) !== count($requestParts)) {
+            return false;
+        }
+
+        $params = [];
+        for ($i = 0; $i < count($routeParts); $i++) {
+            if (preg_match('/^{(.+)}$/', $routeParts[$i], $matches)) {
+                $params[$matches[1]] = $requestParts[$i];
+            } elseif ($routeParts[$i] !== $requestParts[$i]) {
+                return false;
+            }
+        }
+
+        return $params;
+    }
+
     public function dispatch() {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -32,7 +52,8 @@ class Router {
         }
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $requestMethod && $route['path'] === $requestUri) {
+            $params = $this->matchRoute($route['path'], $requestUri);
+            if ($route['method'] === $requestMethod && $params !== false) {
                 if (isset($route['loginCallback']) && is_callable($route['loginCallback'])) {
                     if (!call_user_func($route['loginCallback'])) {
                         header("HTTP/1.0 401 Unauthorized");
@@ -55,7 +76,12 @@ class Router {
                         return;
                     }
                 }
-                call_user_func($route['callback']);
+                
+                if (is_callable($route['callback'])) {
+                    call_user_func_array($route['callback'], $params);
+                } else {
+                    call_user_func_array($route['callback'], $params);
+                }
                 return;
             }
         }
