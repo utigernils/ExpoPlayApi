@@ -1,9 +1,12 @@
 <?php
-class DashboardUser_crtl {
+class userController {
 
     private $session;
-    public function __construct($session) {
+    private $userModell; 
+
+    public function __construct($session, $dataModell) {
         $this->session = $session;
+        $this->userModell = $dataModell;
     }
 
     public function login() {

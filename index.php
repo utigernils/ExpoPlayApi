@@ -4,6 +4,20 @@ require_once 'handlers/router.php';
 require_once 'handlers/session.php';
 require_once 'handlers/db.php';
 
+require_once 'modells/Console.php';
+require_once 'modells/DashboardUser.php';
+require_once 'modells/Expo.php';
+require_once 'modells/PlayedQuizzes.php';
+require_once 'modells/Player.php';
+require_once 'modells/Questions.php';
+require_once 'modells/Quiz.php';
+
+require_once 'controllers/consoleController.php';
+require_once 'controllers/expoController.php';
+require_once 'controllers/played-quizController.php';
+require_once 'controllers/playerController.php';
+require_once 'controllers/questionController.php';
+require_once 'controllers/quizController.php';
 require_once 'controllers/userController.php';
 
 $config = new Config(configPath:
@@ -15,8 +29,6 @@ $router = new Router(
     basePath:$config->get('base_path')
 );
 
-$session = new Session();
-
 $db = new db(
     host:$config->get('db_host'), 
     db:$config->get('db_name'),
@@ -24,12 +36,23 @@ $db = new db(
     pass:$config->get('db_pass')
 );
 
-$userController = new DashboardUser_crtl($session);
+$session = new Session();
 
-#helper functions
-function getUser() {
-    echo 'it works';
-}
+$consoleModell = new Console($db);
+$dashboardUserModell = new DashboardUser($db);
+$expoModell = new Expo($db);
+$playedQuizzesModell = new playedQuizzes($db);
+$playerModell = new Player($db);
+$questionsModell = new Questions($db);
+$quizModell = new Quiz($db);
+
+$consoleController = new consoleController($session, $consoleModell);
+$expoController = new expoController($session, $expoModell);
+$playedquizController = new playedquizController($session, $playedQuizzesModell);
+$playerController = new playerController($session, $playerModell);
+$questionController = new questionController($session, $questionsModell);
+$quizController = new quizController($session, $quizModell);
+$userController = new userController($session, $dashboardUserModell);
 
 $router->addRoute(
     method: 'GET', 
