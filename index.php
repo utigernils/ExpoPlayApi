@@ -9,7 +9,7 @@ $router = new Router($config->get('content_type'),$config->get('base_path'));
 $db = new db($config->get('db_host'), $config->get('db_name'), $config->get('db_user'), $config->get('db_pass'));
 
 function login() {
-    return true;
+    return false;
 }
 
 $router->addRoute('GET', '/test', function() use ($db) {

@@ -2,10 +2,15 @@
 class Router {
     private $routes = [];
     private $basePath = '';
+    private $contentType = null;
 
     public function __construct($contentType, $basePath = '') {
         $this->basePath = $basePath;
-        header('Content-Type: ' . $contentType);
+        $this->contentType = $contentType;
+
+        if ($this->contentType != null) {
+            header('Content-Type: ' . $this->contentType);
+        }
     }
 
     public function addRoute($method, $path, $callback, $permissionCallback = null, $loginCallback = null) {
@@ -31,14 +36,22 @@ class Router {
                 if (isset($route['loginCallback']) && is_callable($route['loginCallback'])) {
                     if (!call_user_func($route['loginCallback'])) {
                         header("HTTP/1.0 401 Unauthorized");
-                        echo '401 Unauthorized';
+                        if ($this->contentType == 'application/json') {
+                            echo json_encode(['error' => '401 Unauthorized']);
+                        } else {
+                            echo '401 Unauthorized';
+                        }
                         return;
                     }
                 }
                 if (isset($route['permissionCallback']) && is_callable($route['permissionCallback'])) {
                     if (!call_user_func($route['permissionCallback'])) {
                         header("HTTP/1.0 403 Forbidden");
-                        echo '403 Forbidden';
+                        if ($this->contentType == 'application/json') {
+                            echo json_encode(['error' => '403 Forbidden']);
+                        } else {
+                            echo '403 Forbidden';
+                        }
                         return;
                     }
                 }
@@ -48,6 +61,10 @@ class Router {
         }
 
         header("HTTP/1.0 404 Not Found");
-        echo '404 Not Found';
+        if ($this->contentType == 'application/json') {
+            echo json_encode(['error' => '404 Not Found']);
+        } else {
+            echo '404 Not Found';
+        }
     }
 }
