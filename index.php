@@ -1,9 +1,9 @@
 <?php
 
-require_once 'src/config.php';
-require_once 'src/router.php';
-require_once 'src/session.php';
-require_once 'src/db.php';
+require_once 'handlers/config.php';
+require_once 'handlers/router.php';
+require_once 'handlers/session.php';
+require_once 'handlers/db.php';
 
 
 $config = new Config(configPath:
