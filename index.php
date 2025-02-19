@@ -57,7 +57,7 @@ $userController = new userController($session, $dashboardUserModell);
 $router->addRoute(
     method: 'GET', 
     path: '/user/{userId}', 
-    callback: 'getUser',
+    callback: [$userController, 'getUserById'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );  
@@ -65,7 +65,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/user/{userId}', 
-    callback: 'updateUser',
+    callback: [$userController, 'updateUser'],
     permissionCallback: [$session, 'checkAdmin'], 
     loginCallback: [$session, 'checkLogin']
 );  
@@ -73,7 +73,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/user/{userId}', 
-    callback: 'deleteUser',
+    callback: [$userController, 'deleteUser'],
     permissionCallback: [$session, 'checkAdmin'], 
     loginCallback: [$session, 'checkLogin']
 );  
@@ -81,7 +81,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/user', 
-    callback: 'getUser',
+    callback: [$userController, 'getUser'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -89,7 +89,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/user', 
-    callback: 'registerUser',
+    callback: [$userController, 'registerUser'],
     permissionCallback: [$session, 'checkAdmin'], 
     loginCallback: [$session, 'checkLogin']
 );
