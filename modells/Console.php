@@ -2,7 +2,7 @@
 class Console {
     private $db_conn;
     public function __construct($db_conn) {
-        $this->db_conn = $db_conn;
+        $this->db_conn = $db_conn->getConnection();
     }
 
     public function create($name, $location, $startsOn = null, $endsOn = null) {
@@ -22,15 +22,15 @@ class Console {
 
     public function get($id = null) {
         if (is_null($id)) {
-            $sql = "SELECT * FROM Console";
+            $sql = "SELECT * FROM console";
         } else {
-            $sql = "SELECT * FROM Console WHERE id = $id";
+            $sql = "SELECT * FROM console WHERE id = '$id'";
         }
 
         $result = $this->db_conn->query($sql);
         $consoles = array();
 
-        while ($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $consoles[] = $row;
         }
 

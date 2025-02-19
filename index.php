@@ -4,6 +4,8 @@ require_once 'handlers/router.php';
 require_once 'handlers/session.php';
 require_once 'handlers/db.php';
 
+require_once 'controllers/userController.php';
+
 $config = new Config(configPath:
     'config.ini'
 );
@@ -21,6 +23,8 @@ $db = new db(
     user: $config->get('db_user'), 
     pass:$config->get('db_pass')
 );
+
+$userController = new DashboardUser_crtl($session);
 
 #helper functions
 function getUser() {
@@ -288,13 +292,13 @@ $router->addRoute(
     path: '/login', 
     callback: 'checkLoginState',
     permissionCallback: true, 
-    loginCallback: [$session, 'checkLogin']
+    loginCallback: true
 );
 
 $router->addRoute(
     method: 'POST', 
     path: '/login', 
-    callback: 'loginUser',
+    callback: [$userController, 'login'],
     permissionCallback: true, 
     loginCallback: true
 );
@@ -302,7 +306,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/logout', 
-    callback: 'logoutUser',
+    callback: [$userController, 'logout'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
