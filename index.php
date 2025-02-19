@@ -9,11 +9,19 @@ $router = new Router($config->get('content_type'),$config->get('base_path'));
 $db = new db($config->get('db_host'), $config->get('db_name'), $config->get('db_user'), $config->get('db_pass'));
 
 function login() {
-    return false;
+    return true;
 }
 
-$router->addRoute('GET', '/test', function() use ($db) {
-    echo json_encode($db->getConnection()->query('SELECT * FROM player')->fetchAll());
-}, 'login', 'login');  
+function testResponse() {
+    echo json_encode(['Hello' => 'World']);
+}
+
+$router->addRoute(
+    method: 'GET', 
+    path: '/test', 
+    callback: 'testResponse',
+    permissionCallback: 'login', 
+    loginCallback:'login'
+);  
 
 $router->dispatch();
