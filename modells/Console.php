@@ -5,23 +5,24 @@ class Console {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($name, $location, $startsOn = null, $endsOn = null) {
-        $name = $this->db_conn->real_escape_string($name);
-        $location = $this->db_conn->real_escape_string($location);
-        $startsOn = is_null($startsOn) ? "NULL" : "'" . $this->db_conn->real_escape_string($startsOn) . "'";
-        $endsOn = is_null($endsOn) ? "NULL" : "'" . $this->db_conn->real_escape_string($endsOn) . "'";
+    public function create($name, $isActive, $currentExpo = null, $currentQuiz = null) {
+        $sql = "INSERT INTO console (currentExpo, currentQuiz, name, isActive) VALUES (:currentExpo, :currentQuiz, :name, :isActive)";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':currentExpo', $currentExpo);
+        $stmt->bindValue(':currentQuiz', $currentQuiz);
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':isActive', $isActive);
 
-        $sql = "INSERT INTO Console (name, location, startsOn, endsOn, isActive) 
-                VALUES ('$name', '$location', $startsOn, $endsOn, 1)";
-
-        if ($this->db_conn->query($sql)) {
-            return $this->db_conn->insert_id;
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
         }
-        return false;
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['currentExpo', 'currentQuiz', 'isActive'];
+        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive'];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -51,7 +52,7 @@ class Console {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['currentExpo', 'currentQuiz', 'isActive'];
+        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive'];
         
         if (!in_array($field, $allowedFields)) {
             return false;
