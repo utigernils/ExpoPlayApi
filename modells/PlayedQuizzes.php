@@ -78,12 +78,16 @@ class PlayedQuizzes {
     }
 
     public function delete($id) {
-        $sql = "SELECT id FROM playedquizzes WHERE id = '$id'";
-        $result = $this->db_conn->query($sql);
+        $sql = "SELECT id FROM playedquizzes WHERE id = :id";
+        $stmt = $this->db_conn->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
 
-        if ($result && $result->rowCount() > 0) {
-            $deleteSql = "DELETE FROM playedquizzes WHERE id = '$id'";
-            $this->db_conn->query($deleteSql);
+        if ($stmt && $stmt->rowCount() > 0) {
+            $deleteSql = "DELETE FROM playedquizzes WHERE id = :id";
+            $deleteStmt = $this->db_conn->prepare($deleteSql);
+            $deleteStmt->bindValue(':id', $id);
+            $deleteStmt->execute();
             return true;
         }
 

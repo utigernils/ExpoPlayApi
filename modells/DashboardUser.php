@@ -76,14 +76,19 @@ class DashboardUser {
     }
 
     public function delete($id) {
-        $sql = "DELETE FROM dashboarduser WHERE id = :id";
+        $sql = "SELECT id FROM dashboarduser WHERE id = :id";
         $stmt = $this->db_conn->prepare($sql);
         $stmt->bindValue(':id', $id);
+        $stmt->execute();
 
-        try {
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            return false;
+        if ($stmt && $stmt->rowCount() > 0) {
+            $deleteSql = "DELETE FROM dashboarduser WHERE id = :id";
+            $deleteStmt = $this->db_conn->prepare($deleteSql);
+            $deleteStmt->bindValue(':id', $id);
+            $deleteStmt->execute();
+            return true;
         }
+
+        return false;
     }
 }
