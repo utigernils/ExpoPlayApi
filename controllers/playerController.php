@@ -8,4 +8,20 @@ class playerController {
         $this->session = $session;
         $this->playerModell = $dataModell;
     }
+
+    public function getPlayer() {
+
+    }
+
+    public function updatePlayer() {
+
+    }
+
+    public function removePlayer() {
+
+    }
+
+    public function getAllPlayers() {
+
+    }
 }

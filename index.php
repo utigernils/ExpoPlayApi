@@ -20,6 +20,8 @@ require_once 'controllers/questionController.php';
 require_once 'controllers/quizController.php';
 require_once 'controllers/userController.php';
 
+require_once 'controllers/loginController.php';
+
 $config = new Config(configPath:
     'config.ini'
 );
@@ -53,6 +55,8 @@ $playerController = new playerController($session, $playerModell);
 $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
+
+$loginController = new loginController($session, $db);
 
 $router->addRoute(
     method: 'GET', 
@@ -97,7 +101,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/console/{consoleId}', 
-    callback: 'getConsole',
+    callback: [$consoleController, 'getConsole'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -105,7 +109,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/console/{consoleId}', 
-    callback: 'updateConsole',
+    callback: [$consoleController, 'updateConsole'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -113,7 +117,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/console/{consoleId}', 
-    callback: 'unlinkConsole',
+    callback: [$consoleController, 'unlinkConsole'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -121,7 +125,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/console', 
-    callback: 'getAllConsoles',
+    callback: [$consoleController, 'getAllConsoles'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -129,7 +133,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/console', 
-    callback: 'registerConsole',
+    callback: [$consoleController, 'registerConsole'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -137,7 +141,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/player/{playerId}', 
-    callback: 'getPlayer',
+    callback: [$playerController, 'getPlayer'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -145,7 +149,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/player/{playerId}', 
-    callback: 'updatePlayer',
+    callback: [$playerController, 'updatePlayer'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -153,7 +157,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/player/{playerId}', 
-    callback: 'removePlayer',
+    callback: [$playerController, 'removePlayer'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -161,7 +165,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/player', 
-    callback: 'getAllPlayers',
+    callback: [$playerController, 'getAllPlayers'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -169,7 +173,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/quiz/{quizId}', 
-    callback: 'getQuiz',
+    callback: [$quizController, 'getQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -177,7 +181,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/quiz/{quizId}', 
-    callback: 'updateQuiz',
+    callback: [$quizController, 'updateQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -185,7 +189,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/quiz/{quizId}', 
-    callback: 'deleteQuiz',
+    callback: [$quizController, 'deleteQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -193,7 +197,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/quiz', 
-    callback: 'getAllQuizzes',
+    callback: [$quizController, 'getAllQuizzes'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -201,7 +205,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/quiz', 
-    callback: 'createQuiz',
+    callback: [$quizController, 'createQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -209,7 +213,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/played-quiz/{pquizId}', 
-    callback: 'getPlayedQuiz',
+    callback: [$playedquizController, 'getPlayedQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -217,7 +221,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/played-quiz/{pquizId}', 
-    callback: 'deletePlayedQuiz',
+    callback: [$playedquizController, 'deletePlayedQuiz'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -225,7 +229,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/played-quiz', 
-    callback: 'getAllPlayedQuizzes',
+    callback: [$playedquizController, 'getAllPlayedQuizzes'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -233,7 +237,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/question/{quizId}', 
-    callback: 'getAllQuestions',
+    callback: [$questionController, 'getAllQuestions'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -241,7 +245,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/question/{quizId}', 
-    callback: 'addQuestion',
+    callback: [$questionController, 'addQuestion'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -249,7 +253,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/question/{quizId}/{questionId}', 
-    callback: 'getQuestion',
+    callback: [$questionController, 'getQuestion'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -257,7 +261,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/question/{quizId}/{questionId}', 
-    callback: 'updateQuestion',
+    callback: [$questionController, 'updateQuestion'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -265,7 +269,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/question/{quizId}/{questionId}', 
-    callback: 'deleteQuestion',
+    callback: [$questionController, 'deleteQuestion'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -273,7 +277,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/expo/{expoId}', 
-    callback: 'getExpo',
+    callback: [$expoController, 'getExpo'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -281,7 +285,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'PUT', 
     path: '/expo/{expoId}', 
-    callback: 'updateExpo',
+    callback: [$expoController, 'updateExpo'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -289,7 +293,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'DELETE', 
     path: '/expo/{expoId}', 
-    callback: 'deleteExpo',
+    callback: [$expoController, 'deleteExpo'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -297,7 +301,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/expo', 
-    callback: 'getAllExpos',
+    callback: [$expoController, 'getAllExpos'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -305,7 +309,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/expo', 
-    callback: 'createExpo',
+    callback: [$expoController, 'createExpo'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );
@@ -313,7 +317,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/login', 
-    callback: 'checkLoginState',
+    callback: [$loginController, 'checkLoginState'],
     permissionCallback: true, 
     loginCallback: true
 );
@@ -321,7 +325,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'POST', 
     path: '/login', 
-    callback: [$userController, 'login'],
+    callback: [$loginController, 'login'],
     permissionCallback: true, 
     loginCallback: true
 );
@@ -329,7 +333,7 @@ $router->addRoute(
 $router->addRoute(
     method: 'GET', 
     path: '/logout', 
-    callback: [$userController, 'logout'],
+    callback: [$loginController, 'logout'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
 );

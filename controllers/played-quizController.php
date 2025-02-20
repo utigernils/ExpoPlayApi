@@ -8,4 +8,17 @@ class playedquizController {
         $this->session = $session;
         $this->quizModell = $dataModell;
     }
+
+    public function getPlayedQuiz() {
+
+    }
+
+    public function deletePlayedQuiz() {
+
+    }
+
+    public function getAllPlayedQuizzes() {
+
+    }
+    
 }

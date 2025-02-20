@@ -8,4 +8,24 @@ class questionController {
         $this->session = $session;
         $this->questionModell = $dataModell;
     }
+
+    public function getAllQuestions() {
+
+    }
+
+    public function addQuestion() {
+
+    }
+
+    public function getQuestion() {
+
+    }
+
+    public function updateQuestion() {
+
+    }
+
+    public function deleteQuestion() {
+        
+    }
 }
