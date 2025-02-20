@@ -1,11 +1,15 @@
 <?php
+require_once 'utils/response.php';
+
 class loginController {
     private $session;
     private $db_conn; 
+    private $response;
 
     public function __construct($session, $db) {
         $this->session = $session;
         $this->db_conn = $db->getConnection();
+        $this->response = new Response();
     }
 
     public function checkLoginState() {

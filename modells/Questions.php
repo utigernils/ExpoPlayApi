@@ -5,7 +5,7 @@ class Questions {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($quiz, $isActive = true, $questionType, $pointMultiplier = null, $answerPossibilities = null) {
+    public function create($quiz, $questionType, $isActive = true, $pointMultiplier = null, $answerPossibilities = null) {
         $sql = "INSERT INTO questions (quiz, isActive, questionType, pointMultiplier, answerPossibilities) 
                 VALUES (:quiz, :isActive, :questionType, :pointMultiplier, :answerPossibilities)";
         $stmt = $this->db_conn->prepare($sql);

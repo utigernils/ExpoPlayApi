@@ -5,7 +5,7 @@ class PlayedQuizzes {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($player, $quiz, $expo = null, $startedOn, $endedOn = null, $correctAnswers = null, $wrongAnswers = null, $quizName, $expoName = null) {
+    public function create($player, $quiz, $startedOn, $quizName, $expo = null, $endedOn = null, $correctAnswers = null, $wrongAnswers = null, $expoName = null) {
         $sql = "INSERT INTO playedquizzes (player, quiz, expo, startedOn, endedOn, correctAnswers, wrongAnswers, quizName, expoName) 
                 VALUES (:player, :quiz, :expo, :startedOn, :endedOn, :correctAnswers, :wrongAnswers, :quizName, :expoName)";
         $stmt = $this->db_conn->prepare($sql);

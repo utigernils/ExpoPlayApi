@@ -25,20 +25,27 @@ class response {
         }
     }
 
-    public function error($responseCode = 400, $message) {
+    public function error($message, $responseCode = 400) {
         $header = $this->getHeader($responseCode);
         header($header);
 
         $response = json_encode(["error" => $message]);
         echo $response;
+        exit();
 
     }
 
-    public function message($responseCode = 200, $message) {
+    public function message($message, $responseCode = 200) {
         $header = $this->getHeader($responseCode);
         header($header);
 
         $response = json_encode(["msg"=> $message]);
         echo $response;
+        exit();
+    }
+
+    public Function setHeader($code) {
+        $header = $this->getHeader($code);
+        header($header);
     }
 }

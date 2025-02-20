@@ -1,12 +1,16 @@
 <?php
+require_once 'utils/response.php';
+
 class userController {
 
     private $session;
     private $userModell; 
+    private $response;
 
     public function __construct($session, $dataModell) {
         $this->session = $session;
         $this->userModell = $dataModell;
+        $this->response = new Response();
     }
 
     private function checkParameter($param) {
