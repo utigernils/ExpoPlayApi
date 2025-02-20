@@ -9,7 +9,10 @@ class consoleController {
         $this->consoleModell = $dataModell;
     }
 
-    public function getConsole() {
+    public function getConsole($consoleId) {
+        $update = $this->consoleModell->get(orderBy: 'nadme', desc: false);
+
+
 
     }
 

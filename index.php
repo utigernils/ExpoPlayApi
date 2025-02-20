@@ -314,6 +314,7 @@ $router->addRoute(
     loginCallback: [$session, 'checkLogin']
 );
 
+#done
 $router->addRoute(
     method: 'GET', 
     path: '/login', 
@@ -322,6 +323,7 @@ $router->addRoute(
     loginCallback: true
 );
 
+#done
 $router->addRoute(
     method: 'POST', 
     path: '/login', 
@@ -330,6 +332,7 @@ $router->addRoute(
     loginCallback: true
 );
 
+#done
 $router->addRoute(
     method: 'GET', 
     path: '/logout', 

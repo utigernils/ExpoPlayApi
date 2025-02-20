@@ -20,13 +20,26 @@ class Console {
         return false;
     }
 
-    public function get($id = null) {
+    public function get($id = null, $orderBy = null, $desc = false) {
+        $allowedFields = ['currentExpo', 'currentQuiz', 'isActive'];
+        
+        if (!in_array($orderBy, $allowedFields)) {
+            return false;
+        }
+
         if (is_null($id)) {
             $sql = "SELECT * FROM console";
+
+            if (!is_null($orderBy)) {
+                $sql .= " ORDER BY " . $orderBy;
+                if ($desc) {
+                    $sql .= " DESC";
+                }
+            }
         } else {
             $sql = "SELECT * FROM console WHERE id = '$id'";
         }
-
+        
         $result = $this->db_conn->query($sql);
         $consoles = array();
 
