@@ -45,7 +45,7 @@ class loginController {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (password_verify($password, $user['password'])) {
-            $this->session->set('user_id', $user['id']); 
+            $this->session->set('userId', $user['id']); 
                 
             echo json_encode([
                 'msg' => 'Successfully logged in',

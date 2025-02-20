@@ -2,13 +2,15 @@
 class Session {
     private $sessionId;
     private $sessionData;
+    private $userModell;
     
-    public function __construct() {
+    public function __construct($userModell) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         $this->sessionId = session_id();
         $this->sessionData = &$_SESSION;
+        $this->userModell = $userModell;
     }
     
     public function set($key, $value) {
@@ -35,7 +37,7 @@ class Session {
     }
 
     public function checkLogin() {
-        if ($this->get('user_id') != null) {
+        if ($this->get('userId') != null) {
             return true;
         } else {
             return false;
@@ -43,8 +45,14 @@ class Session {
     }
     
     public function checkAdmin() {
-        if ($this->get('isAdmin') == 1) {
-            return true;
+        $currentUser = $this->userModell->getUser($this->get('userId'));
+
+        if ($currentUser != null | empty($currentUser)) {
+            if ($currentUser['isAdmin'] == 1) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

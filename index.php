@@ -38,8 +38,6 @@ $db = new db(
     pass:$config->get('db_pass')
 );
 
-$session = new Session();
-
 $consoleModell = new Console($db);
 $dashboardUserModell = new DashboardUser($db);
 $expoModell = new Expo($db);
@@ -47,6 +45,8 @@ $playedQuizzesModell = new playedQuizzes($db);
 $playerModell = new Player($db);
 $questionsModell = new Questions($db);
 $quizModell = new Quiz($db);
+
+$session = new Session($dashboardUserModell);
 
 $consoleController = new consoleController($session, $consoleModell);
 $expoController = new expoController($session, $expoModell);
