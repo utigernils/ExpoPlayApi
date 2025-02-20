@@ -22,7 +22,7 @@ class Console {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive'];
+        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -52,7 +52,7 @@ class Console {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive'];
+        $allowedFields = ['currentExpo', 'currentQuiz', 'name', 'isActive', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;

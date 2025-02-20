@@ -23,7 +23,7 @@ class DashboardUser {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['firstName', 'lastName', 'email', 'isAdmin'];
+        $allowedFields = ['firstName', 'lastName', 'email', 'isAdmin', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -53,7 +53,7 @@ class DashboardUser {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['firstName', 'lastName', 'email', 'isAdmin'];
+        $allowedFields = ['firstName', 'lastName', 'email', 'isAdmin', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;

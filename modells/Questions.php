@@ -24,7 +24,7 @@ class Questions {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities'];
+        $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -54,7 +54,7 @@ class Questions {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities'];
+        $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;

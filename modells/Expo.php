@@ -23,7 +23,7 @@ class Expo {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive'];
+        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -53,7 +53,7 @@ class Expo {
     }
     
     public function set($id, $field, $value) {
-        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive'];
+        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;

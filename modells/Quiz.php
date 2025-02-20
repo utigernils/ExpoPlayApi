@@ -20,7 +20,7 @@ class Quiz {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['name', 'isActive'];
+        $allowedFields = ['name', 'isActive', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -50,7 +50,7 @@ class Quiz {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['name', 'isActive'];
+        $allowedFields = ['name', 'isActive', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;

@@ -28,7 +28,7 @@ class PlayedQuizzes {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['player', 'quiz', 'expo', 'startedOn', 'endedOn', 'correctAnswers', 'wrongAnswers', 'quizName', 'expoName'];
+        $allowedFields = ['player', 'quiz', 'expo', 'startedOn', 'endedOn', 'correctAnswers', 'wrongAnswers', 'quizName', 'expoName', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -58,7 +58,7 @@ class PlayedQuizzes {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['player', 'quiz', 'expo', 'startedOn', 'endedOn', 'correctAnswers', 'wrongAnswers', 'quizName', 'expoName'];
+        $allowedFields = ['player', 'quiz', 'expo', 'startedOn', 'endedOn', 'correctAnswers', 'wrongAnswers', 'quizName', 'expoName', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;
