@@ -30,8 +30,6 @@ class consoleController {
         } else {
             $this->response->error(message:'Console not found', responseCode:404);
         }
-        
-        
     }
 
     public function updateConsole($consoleId) {
@@ -94,6 +92,11 @@ class consoleController {
 
     public function registerConsole() {
         $jsonData = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($jsonData)) {
+            $this->response->error(message:'No data provided', responseCode:400);
+        }
+        
         if (!isset($jsonData['name'])) {
             $this->response->error(message:'Name is required', responseCode:400);
         }
