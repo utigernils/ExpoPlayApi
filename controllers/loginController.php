@@ -1,23 +1,26 @@
 <?php
 require_once 'utils/response.php';
 
-class loginController {
+class loginController
+{
     private $session;
-    private $db_conn; 
+    private $db_conn;
     private $response;
 
-    public function __construct($session, $db) {
+    public function __construct($session, $db)
+    {
         $this->session = $session;
         $this->db_conn = $db->getConnection();
         $this->response = new Response();
     }
 
-    public function checkLoginState() {
+    public function checkLoginState()
+    {
         $state = $this->session->checkLogin();
         if ($state) {
-            echo json_encode([
-                'state' => true
-            ]);
+            $userId = $this->session->get('userId');
+
+            echo json_encode(['state' => true, 'user' => $userId]);
         } else {
             echo json_encode([
                 'state' => false
@@ -25,15 +28,17 @@ class loginController {
         }
     }
 
-    public function login() {
+    public function login()
+    {
+        if($this->session->checkLogin()) {
+            $this->response->message('You are already logged in', 200);
+        }
+
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
         if (!isset($data['email']) || !isset($data['password']) || empty($data['email']) || empty($data['password'])) {
-            echo json_encode([
-                'error' => 'Email and password are required'
-            ]);
-            return;
+            $this->response->error('Password and email are required');
         }
 
         $email = $data['email'];
@@ -45,8 +50,8 @@ class loginController {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (password_verify($password, $user['password'])) {
-            $this->session->set('userId', $user['id']); 
-                
+            $this->session->set('userId', $user['id']);
+
             echo json_encode([
                 'msg' => 'Successfully logged in',
                 'user' => [
@@ -55,16 +60,15 @@ class loginController {
                     'lastName' => $user['lastName'],
                     'email' => $user['email']
                 ]
-                ]);
-        } else {
-            echo json_encode([
-                'error' => 'Invalid credentials'
             ]);
+        } else {
+            $this->response->error('Invalid credentials', 401);
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->session->clear();
-        echo json_encode(['msg' => 'Successfully logged out']);
+        $this->response->message('Successfully logged out');
     }
 }
