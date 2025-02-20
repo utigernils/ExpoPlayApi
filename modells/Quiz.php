@@ -5,6 +5,20 @@ class Quiz {
         $this->db_conn = $db_conn->getConnection();
     }
 
+    public function create($name, $isActive) {
+        $sql = "INSERT INTO quiz (name, isActive) VALUES (:name, :isActive)";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':isActive', $isActive);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function get($id = null, $orderBy = null, $desc = false) {
         $allowedFields = ['name', 'isActive'];
         

@@ -5,6 +5,28 @@ class PlayedQuizzes {
         $this->db_conn = $db_conn->getConnection();
     }
 
+    public function create($player, $quiz, $expo = null, $startedOn, $endedOn = null, $correctAnswers = null, $wrongAnswers = null, $quizName, $expoName = null) {
+        $sql = "INSERT INTO playedquizzes (player, quiz, expo, startedOn, endedOn, correctAnswers, wrongAnswers, quizName, expoName) 
+                VALUES (:player, :quiz, :expo, :startedOn, :endedOn, :correctAnswers, :wrongAnswers, :quizName, :expoName)";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':player', $player);
+        $stmt->bindValue(':quiz', $quiz);
+        $stmt->bindValue(':expo', $expo);
+        $stmt->bindValue(':startedOn', $startedOn);
+        $stmt->bindValue(':endedOn', $endedOn);
+        $stmt->bindValue(':correctAnswers', $correctAnswers);
+        $stmt->bindValue(':wrongAnswers', $wrongAnswers);
+        $stmt->bindValue(':quizName', $quizName);
+        $stmt->bindValue(':expoName', $expoName);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function get($id = null, $orderBy = null, $desc = false) {
         $allowedFields = ['player', 'quiz', 'expo', 'startedOn', 'endedOn', 'correctAnswers', 'wrongAnswers', 'quizName', 'expoName'];
         

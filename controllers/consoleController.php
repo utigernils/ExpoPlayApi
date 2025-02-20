@@ -9,10 +9,7 @@ class consoleController {
         $this->consoleModell = $dataModell;
     }
 
-    public function getConsole($consoleId) {
-        $update = $this->consoleModell->delete('9984bc2e-ef63-11ef-b8ed-70a8d3185f5f');
-
-        echo $update;
+    public function getConsole() {
 
     }
 

@@ -5,6 +5,24 @@ class Player {
         $this->db_conn = $db_conn->getConnection();
     }
 
+    public function create($firstName, $lastName, $email, $wantsNewsletter = false, $isActive = true) {
+        $sql = "INSERT INTO player (firstName, lastName, email, wantsNewsletter, createdOn, lastLogin, isActive) 
+                VALUES (:firstName, :lastName, :email, :wantsNewsletter, NOW(), NOW(), :isActive)";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':firstName', $firstName);
+        $stmt->bindValue(':lastName', $lastName);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':wantsNewsletter', $wantsNewsletter, PDO::PARAM_BOOL);
+        $stmt->bindValue(':isActive', $isActive, PDO::PARAM_BOOL);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function get($id = null, $orderBy = null, $desc = false) {
         $allowedFields = ['firstName', 'lastName', 'email', 'wantsNewsletter', 'createdOn', 'lastLogin', 'isActive'];
         

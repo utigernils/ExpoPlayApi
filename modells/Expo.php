@@ -5,6 +5,23 @@ class Expo {
         $this->db_conn = $db_conn->getConnection();
     }
 
+    public function create($name, $isActive, $location = null, $startsOn = null, $endsOn = null ) {
+        $sql = "INSERT INTO expo (name, location, startsOn, endsOn, isActive) VALUES (:name, :location, :startsOn, :endsOn, :isActive)";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':name', $name);
+        $stmt->bindValue(':location', $location);
+        $stmt->bindValue(':startsOn', $startsOn);
+        $stmt->bindValue(':endsOn', $endsOn);
+        $stmt->bindValue(':isActive', $isActive);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function get($id = null, $orderBy = null, $desc = false) {
         $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive'];
         
