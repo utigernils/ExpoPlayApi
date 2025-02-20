@@ -38,15 +38,22 @@ class Console {
     }
 
     public function set($id, $field, $value) {
-        $id = $this->db_conn->real_escape_string($id);
-        $field = $this->db_conn->real_escape_string($field);
-        $value = $this->db_conn->real_escape_string($value);
+        $allowedFields = ['currentExpo', 'currentQuiz', 'isActive'];
         
-        $sql = "UPDATE Console SET $field = '$value' WHERE id = $id";
-        
-        if ($this->db_conn->query($sql)) {
-            return true;
+        if (!in_array($field, $allowedFields)) {
+            return false;
         }
-        return false;
+
+        $sql = "UPDATE Console SET $field = :value WHERE id = :id";
+        $stmt = $this->db_conn->prepare($sql);
+        
+        $stmt->bindValue(':value', $value);
+        $stmt->bindValue(':id', $id);
+
+        try {
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
