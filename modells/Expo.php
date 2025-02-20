@@ -54,4 +54,17 @@ class Expo {
             return false;
         }
     }
+
+    public function delete($id) {
+        $sql = "SELECT id FROM expo WHERE id = '$id'";
+        $result = $this->db_conn->query($sql);
+
+        if ($result && $result->rowCount() > 0) {
+            $deleteSql = "DELETE FROM expo WHERE id = '$id'";
+            $this->db_conn->query($deleteSql);
+            return true;
+        }
+
+        return false;
+    }
 }

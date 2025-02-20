@@ -10,9 +10,9 @@ class consoleController {
     }
 
     public function getConsole($consoleId) {
-        $update = $this->consoleModell->get(orderBy: 'nadme', desc: false);
+        $update = $this->consoleModell->delete('9984bc2e-ef63-11ef-b8ed-70a8d3185f5f');
 
-
+        echo $update;
 
     }
 
