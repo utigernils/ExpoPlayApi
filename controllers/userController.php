@@ -13,127 +13,121 @@ class userController {
         $this->response = new Response();
     }
 
-    private function checkParameter($param) {
-        if ($param == null || empty($param)) {
-            http_response_code(400);
-            echo json_encode(array("error" => "One or more required parameter is missing or empty"));
+    public function getUserById($userId) {
+        $user = $this->userModell->get($userId);
+
+        if ($user === false) {
+            $this->response->error(message:'Your request was blocked due to invalid credentials');
+        }
+        
+        if (!empty($user)) {
+            $this->response->setHeader(200);
+
+            unset($user[0]['password']);
+            
+            $response = json_encode($user[0]);
+            echo $response;
             exit();
+
+        } else {
+            $this->response->error(message:'User not found', responseCode:404);
         }
     }
 
-    private function checkUser($userId) {
+    public function updateUser($userId) {
         $user = $this->userModell->get($userId);
 
-        if ($user == null) {
-            http_response_code(404);
-            echo json_encode(array("error" => "User not found"));
-            exit();
+        if (empty($user)) {
+            $this->response->error(message:'User not found', responseCode:404);
         }
-    }
 
-    public function getUserById($userId = null) {
-        $this->checkParameter($userId);
-        $this->checkUser($userId);
+        $jsonData = json_decode(file_get_contents('php://input'), true);
 
-        $user = $this->userModell->get($userId);
+        if (empty($jsonData)) {
+            $this->response->error(message:'No data provided', responseCode:400);
+        }
 
-        http_response_code(200);
-        echo json_encode(array(
-            "id" => $user[0]['id'],
-            "firstName" => $user[0]['firstName'],
-            "lastName" => $user[0]['lastName'],
-            "email" => $user[0]['email'],
-            "isAdmin" => $user[0]['isAdmin']
-        ));
-    }
-
-    public function updateUser($userId = null) {
-        $this->checkParameter($userId);
-        $this->checkUser($userId);
-
-        $jsonData = file_get_contents('php://input');
-        $requestData = json_decode($jsonData, true);
-
-        $allowedKeys = ['id', 'firstName', 'lastName', 'email', 'isAdmin'];
-
-        if ($requestData) {
-            foreach ($requestData as $key => $value) {
-                if (!in_array($key, $allowedKeys)) {
-                    http_response_code(400);
-                    echo json_encode(array("error" => "Invalid field: " . $key));
-                    exit();
-                }
+        foreach ($jsonData as $field => $value) {
+            $user = $this->userModell->set($userId, $field, $value);
+            
+            if ($user === false) {
+                $this->response->error(message:'Your request was blocked due to invalid credentials');
             }
         }
 
-        $updateData = $requestData;
-
-        if ($this->userModell->update($userId, $updateData) == 1) {
-            http_response_code(201);
-            echo json_encode(array("msg" => "User updated successfully"));
-            exit();
-        } else {
-            http_response_code(500);
-            echo json_encode(array("error" => "An unknown error occurred while updating the user"));
-            exit();
-        }
+        $this->response->message(message:'User updated successfully', responseCode:200);
     }
 
-    public function deleteUser($userId = null) {
-        $this->checkParameter($userId);
-        $this->checkUser($userId);
+    public function deleteUser($userId) {
+        $user = $this->userModell->get($userId);
 
-        if ($this->userModell->delete($userId) == 1) {
-            http_response_code(201);
-            echo json_encode(array("msg" => "User deleted successfully"));
-            exit();
-        } else {
-            http_response_code(500);
-            echo json_encode(array("error" => "An unknown error occurred while deleting the user"));
-            exit();
+        if (empty($user)) {
+            $this->response->error(message:'User not found', responseCode:404);
         }
+
+        $this->userModell->delete($userId);
+        $this->response->message(message:'User deleted successfully', responseCode:200);
     }
 
     public function getUser() {
-        $user = $this->userModell->get();
+        $orderBy = isset($_GET['orderBy']) ? $_GET['orderBy'] : null;
+        $direction = isset($_GET['desc']) ? $_GET['desc'] : null;
 
-        http_response_code(200);
-        $users = array();
-        foreach ($user as $userData) {
-            $users[] = array(
-                "id" => $userData['id'],
-                "firstName" => $userData['firstName'],
-                "lastName" => $userData['lastName'],
-                "email" => $userData['email'],
-                "isAdmin" => $userData['isAdmin']
-            );
+        $user = $this->userModell->get(orderBy: $orderBy, desc: $direction);
+
+        if ($user === false) {
+            $this->response->error(message:'Your request was blocked due to invalid credentials');
         }
-        echo json_encode(array("users" => $users));
+        
+        if (!empty($user)) {
+            $this->response->setHeader(200);
 
+            $userData = array_map(function($user) {
+                unset($user['password']);
+                return $user;
+            }, $user);
+            
+            $response = json_encode($userData);
+            echo $response;
+            exit();
+
+        } else {
+            $this->response->error(message:'No Users found', responseCode:404);
+        }
     }
 
     public function registerUser() {
-        $jsonData = file_get_contents('php://input');
-        $jsonData = json_decode($jsonData, true);
+        $jsonData = json_decode(file_get_contents('php://input'), true);
 
-        $requiredKeys = ['firstName', 'lastName', 'email','password', 'isAdmin'];
-        
-        foreach ($requiredKeys as $key) {
-            if (!isset($jsonData[$key])) {
-                http_response_code(400);
-                echo json_encode(array("error" => "Missing required field: " . $key));
-                exit();
-            }
+        if (empty($jsonData)) {
+            $this->response->error(message:'No data provided', responseCode:400);
         }
- 
-        if ($this->userModell->create($jsonData) == 1) {
-            http_response_code(201);
-            echo json_encode(array("msg" => "User created successfully"));
-            exit();
+        
+        if (!isset($jsonData['firstName'])) {
+            $this->response->error(message:'First name is required', responseCode:400);
+        }
+        if (!isset($jsonData['lastName'])) {
+            $this->response->error(message:'Last name is required', responseCode:400);
+        }
+        if (!isset($jsonData['email'])) {
+            $this->response->error(message:'Email is required', responseCode:400);
+        }
+        if (!isset($jsonData['password'])) {
+            $this->response->error(message:'Password is required', responseCode:400);
+        }
+
+        $firstName = $jsonData['firstName'];
+        $lastName = $jsonData['lastName'];
+        $email = $jsonData['email'];
+        $password = password_hash($jsonData['password'], PASSWORD_ARGON2I);
+        
+
+        $result = $this->userModell->create($firstName, $lastName, $email, $password);
+
+        if ($result === false) {
+            $this->response->error(message:'User could not be created', responseCode:500);
         } else {
-            http_response_code(500);
-            echo json_encode(array("error" => "An unknown error occurred while creating the user"));
-            exit();
+            $this->response->message(message:'User created', responseCode:201);
         }
     }
  
