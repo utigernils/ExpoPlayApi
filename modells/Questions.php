@@ -41,7 +41,7 @@ class Questions {
                 }
             }
         } else {
-            $sql = "SELECT * FROM questions WHERE id = '$id'";
+            $sql = "SELECT * FROM questions WHERE id = '$id' AND quiz = '$quizId'";
         }
         
         $result = $this->db_conn->query($sql);
