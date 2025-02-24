@@ -45,7 +45,9 @@ class Session {
     }
     
     public function checkAdmin() {
-        $currentUser = $this->userModell->getUser($this->get('userId'));
+        $currentUser = $this->userModell->get($this->get('userId'));
+
+        $currentUser = $currentUser[0];
 
         if ($currentUser != null | empty($currentUser)) {
             if ($currentUser['isAdmin'] == 1) {
