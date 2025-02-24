@@ -5,12 +5,13 @@ class Questions {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($quiz, $questionType, $isActive = true, $pointMultiplier = null, $answerPossibilities = null) {
-        $sql = "INSERT INTO questions (quiz, isActive, questionType, pointMultiplier, answerPossibilities) 
-                VALUES (:quiz, :isActive, :questionType, :pointMultiplier, :answerPossibilities)";
+    public function create($quiz, $question, $questionType, $isActive = true, $pointMultiplier = null, $answerPossibilities = null) {
+        $sql = "INSERT INTO questions (quiz, question, isActive, questionType, pointMultiplier, answerPossibilities) 
+                VALUES (:quiz, :question, :isActive, :questionType, :pointMultiplier, :answerPossibilities)";
         $stmt = $this->db_conn->prepare($sql);
         
         $stmt->bindValue(':quiz', $quiz);
+        $stmt->bindValue(':question', $question);
         $stmt->bindValue(':isActive', $isActive);
         $stmt->bindValue(':questionType', $questionType);
         $stmt->bindValue(':pointMultiplier', $pointMultiplier);
@@ -23,7 +24,7 @@ class Questions {
         }
     }
 
-    public function get($id = null, $orderBy = null, $desc = false) {
+    public function get($quizId, $id = null, $orderBy = null, $desc = false) {
         $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities', null];
         
         if (!in_array($orderBy, $allowedFields)) {
@@ -31,7 +32,7 @@ class Questions {
         }
 
         if (is_null($id)) {
-            $sql = "SELECT * FROM questions";
+            $sql = "SELECT * FROM questions WHERE quiz = '$quizId'";
 
             if (!is_null($orderBy)) {
                 $sql .= " ORDER BY " . $orderBy;
