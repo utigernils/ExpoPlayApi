@@ -76,6 +76,12 @@ class Quiz {
         $stmt->execute();
 
         if ($stmt && $stmt->rowCount() > 0) {
+            $deleteQuestionsSql = "DELETE FROM questions WHERE quiz = :quiz_id";
+            $deleteQuestionsStmt = $this->db_conn->prepare($deleteQuestionsSql);
+            $deleteQuestionsStmt->bindValue(':quiz_id', $id);
+            $deleteQuestionsStmt->execute();
+
+
             $deleteSql = "DELETE FROM quiz WHERE id = :id";
             $deleteStmt = $this->db_conn->prepare($deleteSql);
             $deleteStmt->bindValue(':id', $id);
