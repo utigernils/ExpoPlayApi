@@ -92,23 +92,52 @@ class expoController {
 
     public function createExpo() {
         $jsonData = json_decode(file_get_contents('php://input'), true);
-
+    
         if (empty($jsonData)) {
-            $this->response->error(message:'No data provided', responseCode:400);
+            $this->response->error(message: 'No data provided', responseCode: 400);
         }
-        
-        if (!isset($jsonData['name'])) {
-            $this->response->error(message:'Name is required', responseCode:400);
+    
+        if (!isset($jsonData['name']) || empty($jsonData['name'])) {
+            $this->response->error(message: 'Name is required', responseCode: 400);
         }
-
+    
+        if (!isset($jsonData['startsOn']) || empty($jsonData['startsOn'])) {
+            $this->response->error(message: 'Start date is required', responseCode: 400);
+        }
+    
+        if (!isset($jsonData['endsOn']) || empty($jsonData['endsOn'])) {
+            $this->response->error(message: 'End date is required', responseCode: 400);
+        }
+    
+        if (!isset($jsonData['location']) || empty($jsonData['location'])) {
+            $this->response->error(message: 'Location is required', responseCode: 400);
+        }
+    
+        if (strtotime($jsonData['startsOn']) === false) {
+            $this->response->error(message: 'Invalid start date format', responseCode: 400);
+        }
+    
+        if (strtotime($jsonData['endsOn']) === false) {
+            $this->response->error(message: 'Invalid end date format', responseCode: 400);
+        }
+    
+        if (strtotime($jsonData['startsOn']) > strtotime($jsonData['endsOn'])) {
+            $this->response->error(message: 'Start date must be before end date', responseCode: 400);
+        }
+    
         $name = $jsonData['name'];
-
-        $result = $this->expoModell->create(name: $name, isActive: true);
-
+        $startsOn = $jsonData['startsOn'];
+        $endsOn = $jsonData['endsOn'];
+        $location = $jsonData['location'];
+        $isActive = isset($jsonData['isActive']) ? filter_var($jsonData['isActive'], FILTER_VALIDATE_BOOLEAN) : true;
+    
+        $result = $this->expoModell->create(name: $name, startsOn: $startsOn, endsOn: $endsOn, location: $location, isActive: $isActive);
+    
         if ($result === false) {
-            $this->response->error(message:'Expo could not be created', responseCode:500);
+            $this->response->error(message: 'Expo could not be created', responseCode: 500);
         } else {
-            $this->response->message(message:'Expo created', responseCode:201);
+            $this->response->message(message: 'Expo created successfully', responseCode: 201);
         }
     }
+    
 }
