@@ -13,7 +13,7 @@ class DashboardUser {
         $stmt->bindValue(':lastName', $lastName);
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':password', $password);
-        $stmt->bindValue(':isAdmin', $isAdmin);
+        $stmt->bindValue(':isAdmin', (int)$isAdmin, PDO::PARAM_INT);
 
         try {
             return $stmt->execute();
