@@ -26,6 +26,12 @@ $config = new Config(configPath:
     'config.ini'
 );
 
+if ($config->get('mode') === 'development') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+}
+
 $router = new Router(
     contentType: $config->get('content_type'),
     basePath:$config->get('base_path')
