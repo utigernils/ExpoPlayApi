@@ -20,6 +20,8 @@ require_once 'controllers/questionController.php';
 require_once 'controllers/quizController.php';
 require_once 'controllers/userController.php';
 
+require_once 'controllers/consoleApiController.php';
+
 require_once 'controllers/loginController.php';
 
 $config = new Config(configPath:
@@ -62,6 +64,8 @@ $playerController = new playerController($session, $playerModell);
 $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
+
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell);
 
 $loginController = new loginController($session, $db);
 
@@ -350,6 +354,14 @@ $router->addRoute(
     callback: [$loginController, 'logout'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: 'console/{consoleId}/info',
+    callback: [$consoleApiController, 'getConsoleInfo'],
+    permissionCallback: true,
+    loginCallback: true,
 );
 
 $router->dispatch();
