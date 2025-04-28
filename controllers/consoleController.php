@@ -108,7 +108,12 @@ class consoleController {
         if ($result === false) {
             $this->response->error(message:'Console could not be created', responseCode:500);
         } else {
-            $this->response->message(message:'Console created', responseCode:201);
+            $message = 'Console created';
+
+            $response = json_encode(["msg"=> $message, "id"=> $result]);
+
+            echo $response;
+            exit();
         }
     }
 }
