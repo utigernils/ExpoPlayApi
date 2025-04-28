@@ -65,7 +65,7 @@ $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
 
-$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell);
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell);
 
 $loginController = new loginController($session, $db);
 
