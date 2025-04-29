@@ -53,6 +53,25 @@ class Player {
         return $players;
     }
 
+    public function getByJoinLink($joinLink) {
+        $sql = "SELECT * FROM player WHERE joinLink = :joinLink";
+        $stmt = $this->db_conn->prepare($sql);
+        $stmt->bindValue(':joinLink', $joinLink);
+
+        try {
+            $stmt->execute();
+            $players = array();
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $players[] = $row;
+            }
+
+            return $players;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function set($id, $field, $value) {
         $allowedFields = ['firstName', 'lastName', 'email', 'wantsNewsletter', 'createdOn', 'lastLogin', 'isActive', null];
         
