@@ -8,13 +8,15 @@ class consoleApiController {
     private $quizModell;
     private $expoModell;
     private $playedQuizzesModell;
+    private $playerModell;
     private $response;
 
-    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell) {
+    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell, $playerDataModell) {
         $this->session = $session;
         $this->consoleModell = $consoleDataModell;
         $this->quizModell = $quizDataModell;
         $this->expoModell = $expoDataModell;
+        $this->playerModell = $playerDataModell;
         $this->playedQuizzesModell = $playedQuizzesDataModell;
         $this->response = new Response();
     }
@@ -126,5 +128,17 @@ class consoleApiController {
         } else {
             $this->response->error(message: 'Failed to end quiz', responseCode: 500);
         }
+    }
+
+    public function didPlayerLogin($consoleId, $joinLink) {
+        $this->checkConsoleId($consoleId);
+        $player = $this->playerModell->getByJoinLink($joinLink);
+
+        if (empty($player)) {
+            $this->response->message(message: 'False', responseCode: 200);
+        } else {
+            $this->response->message(message: 'True', responseCode: 200);
+        }
+        
     }
 }

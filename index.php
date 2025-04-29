@@ -65,7 +65,7 @@ $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
 
-$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell);
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell, $playerModell);
 
 $loginController = new loginController($session, $db);
 
@@ -376,6 +376,14 @@ $router->addRoute(
     method: 'POST',
     path: '/console/{consoleId}/end-quiz',
     callback: [$consoleApiController, 'endQuiz'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: '/console/{consoleId}/didPlayerLogin/{joinLink}',
+    callback: [$consoleApiController, 'didPlayerLogin'],
     permissionCallback: true,
     loginCallback: true,
 );
