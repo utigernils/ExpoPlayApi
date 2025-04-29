@@ -135,9 +135,10 @@ class consoleApiController {
         $player = $this->playerModell->getByJoinLink($joinLink);
 
         if (empty($player)) {
-            $this->response->message(message: 'False', responseCode: 200);
+            $this->response->message(message: False, responseCode: 200);
         } else {
-            $this->response->message(message: 'True', responseCode: 200);
+            $player = $player[0]['id'];
+            $this->response->message(message: $player, responseCode: 200);
         }
         
     }
