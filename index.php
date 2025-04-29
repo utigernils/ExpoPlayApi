@@ -65,7 +65,7 @@ $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
 
-$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell);
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell);
 
 $loginController = new loginController($session, $db);
 
@@ -360,6 +360,14 @@ $router->addRoute(
     method: 'GET',
     path: 'console/{consoleId}/info',
     callback: [$consoleApiController, 'getConsoleInfo'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'POST',
+    path: '/console/{consoleId}/start-quiz',
+    callback: [$consoleApiController, 'startQuiz'],
     permissionCallback: true,
     loginCallback: true,
 );

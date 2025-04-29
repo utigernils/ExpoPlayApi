@@ -7,13 +7,15 @@ class consoleApiController {
     private $consoleModell; 
     private $quizModell;
     private $expoModell;
+    private $playedQuizzesModell;
     private $response;
 
-    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell) {
+    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell) {
         $this->session = $session;
         $this->consoleModell = $consoleDataModell;
         $this->quizModell = $quizDataModell;
         $this->expoModell = $expoDataModell;
+        $this->playedQuizzesModell = $playedQuizzesDataModell;
         $this->response = new Response();
     }
 
@@ -48,5 +50,48 @@ class consoleApiController {
 
         $this->response->setHeader(200);
         exit();
+    }
+
+    public function startQuiz($consoleId) {
+        $this->checkConsoleId($consoleId);
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($postData['player'], $postData['startedOn'])) {
+            $this->response->error(message: 'Missing required fields', responseCode: 400);
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $postData['startedOn'])) {
+            $this->response->error(message: 'Invalid timestamp format for startedOn', responseCode: 400);
+        }
+
+        $player = $postData['player'];
+        $startedOn = $postData['startedOn'];
+
+        $console = $this->consoleModell->get($consoleId)[0];
+
+        $quizName = $postData['quizName'] ?? null;
+        
+        $endedOn = $postData['endedOn'] ?? null;
+        $correctAnswers = $postData['correctAnswers'] ?? null;
+        $wrongAnswers = $postData['wrongAnswers'] ?? null;
+        
+
+        $expo = $console['currentExpo'];
+        $quiz = $console['currentQuiz'];
+
+        $expoName = $this->expoModell->get($expo)[0]['name'];
+        $quizName = $this->quizModell->get($quiz)[0]['name'];
+
+        $result = $this->playedQuizzesModell->create($player, $quiz, $startedOn, $quizName, $expo, $endedOn, $correctAnswers, $wrongAnswers, $expoName);
+
+        if ($result !== false) {
+            echo json_encode(['playedQuizId' => $result, 'msg' => 'Quiz started successfully']);
+
+            $this->response->setHeader(201);
+            exit();
+        } else {
+            $this->response->error(message: 'Failed to start quiz', responseCode: 500);
+        }
+        
     }
 }
