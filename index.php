@@ -257,7 +257,7 @@ $router->addRoute(
     path: '/question/{quizId}', 
     callback: [$questionController, 'getAllQuestions'],
     permissionCallback: true, 
-    loginCallback: [$session, 'checkLogin']
+    loginCallback: true
 );
 
 $router->addRoute(
