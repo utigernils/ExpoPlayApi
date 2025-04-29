@@ -94,4 +94,37 @@ class consoleApiController {
         }
         
     }
+
+    public function endQuiz($consoleId) {
+        $this->checkConsoleId($consoleId);
+        $postData = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($postData['id'], $postData['endedOn'], $postData['correctAnswers'], $postData['wrongAnswers'])) {
+            $this->response->error(message: 'Missing required fields', responseCode: 400);
+        }
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $postData['endedOn'])) {
+            $this->response->error(message: 'Invalid timestamp format for endedOn', responseCode: 400);
+        }
+
+        $id = $postData['id'];
+        
+        if(empty($this->playedQuizzesModell->get($id))) {
+            $this->response->error(message: 'Quiz not found', responseCode: 404);
+        }
+
+        $endedOn = $postData['endedOn'];
+        $correctAnswers = $postData['correctAnswers'];
+        $wrongAnswers = $postData['wrongAnswers'];
+
+        $result = $this->playedQuizzesModell->set($id, 'endedOn', $endedOn);
+        $result &= $this->playedQuizzesModell->set($id, 'correctAnswers', $correctAnswers);
+        $result &= $this->playedQuizzesModell->set($id, 'wrongAnswers', $wrongAnswers);
+
+        if ($result) {
+            $this->response->message(message: 'Quiz ended successfully', responseCode: 200);
+        } else {
+            $this->response->error(message: 'Failed to end quiz', responseCode: 500);
+        }
+    }
 }

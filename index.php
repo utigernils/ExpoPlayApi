@@ -372,4 +372,12 @@ $router->addRoute(
     loginCallback: true,
 );
 
+$router->addRoute(
+    method: 'POST',
+    path: '/console/{consoleId}/end-quiz',
+    callback: [$consoleApiController, 'endQuiz'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
 $router->dispatch();
