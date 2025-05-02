@@ -20,7 +20,6 @@ class Player {
         try {
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
             return false;
         }
     }
