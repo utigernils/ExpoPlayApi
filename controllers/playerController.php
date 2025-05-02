@@ -88,4 +88,34 @@ class playerController {
             $this->response->error(message:'No Players found', responseCode:404);
         }
     }
+
+    public function createPlayer() {
+        $jsonData = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($jsonData)) {
+            $this->response->error(message:'No data provided', responseCode:400);
+        }
+
+        $requiredFields = ['firstName', 'lastName', 'email', 'joinLink'];
+        foreach ($requiredFields as $field) {
+            if (empty($jsonData[$field])) {
+                $this->response->error(message:"Value for '$field' is missing", responseCode:400);
+            }
+        }
+
+        $firstName = $jsonData['firstName'];
+        $lastName = $jsonData['lastName'];
+        $joinLink = $jsonData['joinLink'];
+        $email = $jsonData['email'];
+
+        $wantsNewsletter = isset($jsonData['wantsNewsletter']) ? $jsonData['wantsNewsletter'] : false;
+
+        $player = $this->playerModell->create($firstName, $lastName, $email, $joinLink, $wantsNewsletter);
+
+        if ($player === false) {
+            $this->response->error(message:'Your request was blocked due to invalid credentials');
+        }
+
+        $this->response->message(message:'Player created successfully', responseCode:201);
+    }
 }
