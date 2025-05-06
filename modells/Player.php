@@ -5,9 +5,9 @@ class Player {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($firstName, $lastName, $email, $wantsNewsletter = false, $isActive = true) {
-        $sql = "INSERT INTO player (firstName, lastName, email, wantsNewsletter, createdOn, lastLogin, isActive) 
-                VALUES (:firstName, :lastName, :email, :wantsNewsletter, NOW(), NOW(), :isActive)";
+    public function create($firstName, $lastName, $email, $joinLink, $wantsNewsletter = false, $isActive = true) {
+        $sql = "INSERT INTO player (firstName, lastName, email, wantsNewsletter, createdOn, lastLogin, isActive, joinLink) 
+                VALUES (:firstName, :lastName, :email, :wantsNewsletter, NOW(), NOW(), :isActive, :joinLink)";
         $stmt = $this->db_conn->prepare($sql);
         
         $stmt->bindValue(':firstName', $firstName);
@@ -15,6 +15,7 @@ class Player {
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':wantsNewsletter', $wantsNewsletter, PDO::PARAM_BOOL);
         $stmt->bindValue(':isActive', $isActive, PDO::PARAM_BOOL);
+        $stmt->bindValue(':joinLink', $joinLink);
 
         try {
             return $stmt->execute();
