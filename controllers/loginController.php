@@ -14,19 +14,25 @@ class loginController
         $this->response = new Response();
     }
 
-    public function checkLoginState()
-    {
-        $state = $this->session->checkLogin();
-        if ($state) {
-            $userId = $this->session->get('userId');
+	public function checkLoginState()
+	{
+		$state = $this->session->checkLogin();
+		if ($state) {
+			$userId = $this->session->get('userId');
 
-            echo json_encode(['state' => true, 'user' => $userId]);
-        } else {
-            echo json_encode([
-                'state' => false
-            ]);
-        }
-    }
+			$stmt = $this->db_conn->prepare("SELECT email, firstName, lastName, isAdmin FROM dashboarduser WHERE id = ?");
+			$stmt->execute([$userId]);
+
+			$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+			echo json_encode(['state' => true, 'user' => $userId, 'isAdmin' => $user['isAdmin'] ]);
+		} else {
+			echo json_encode([
+				'state' => false
+			]);
+		}
+	}
+
 
     public function login()
     {
@@ -51,6 +57,17 @@ class loginController
 
         if (password_verify($password, $user['password'])) {
             $this->session->set('userId', $user['id']);
+			
+			        if (session_status() === PHP_SESSION_ACTIVE) {
+            setcookie(session_name(), session_id(), [
+                'expires' => time() + 3600,
+                'path' => '/',
+                'domain' => 'expoplayapi.utigernils.ch', // your API domain
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'None'
+            ]);
+        }
 
             echo json_encode([
                 'msg' => 'Successfully logged in',

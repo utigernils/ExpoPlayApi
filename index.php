@@ -20,17 +20,33 @@ require_once 'controllers/questionController.php';
 require_once 'controllers/quizController.php';
 require_once 'controllers/userController.php';
 
+require_once 'controllers/consoleApiController.php';
+
 require_once 'controllers/loginController.php';
 
 $config = new Config(configPath:
     'config.ini'
 );
 
-if ($config->get('mode') === 'development') {
-    header('Access-Control-Allow-Origin: http://localhost:4200');
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+$allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost',
+    'https://expoplay.utigernils.ch',
+    'https://expoplaydashboard.utigernils.ch',
+    'http://localhost:4200',
+    'https://editor.swagger.io'
+    // Do NOT include '*'
+];
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+    if (in_array($origin, $allowedOrigins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    }
 }
 
 $router = new Router(
@@ -62,6 +78,8 @@ $playerController = new playerController($session, $playerModell);
 $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
+
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell, $playerModell, $questionsModell);
 
 $loginController = new loginController($session, $db);
 
@@ -185,6 +203,14 @@ $router->addRoute(
 );
 
 $router->addRoute(
+    method: 'POST',
+    path: '/player',
+    callback: [$playerController, 'createPlayer'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
     method: 'GET', 
     path: '/quiz/{quizId}', 
     callback: [$quizController, 'getQuiz'],
@@ -253,7 +279,7 @@ $router->addRoute(
     path: '/question/{quizId}', 
     callback: [$questionController, 'getAllQuestions'],
     permissionCallback: true, 
-    loginCallback: [$session, 'checkLogin']
+    loginCallback: true
 );
 
 $router->addRoute(
@@ -328,7 +354,6 @@ $router->addRoute(
     loginCallback: [$session, 'checkLogin']
 );
 
-#done
 $router->addRoute(
     method: 'GET', 
     path: '/login', 
@@ -337,7 +362,6 @@ $router->addRoute(
     loginCallback: true
 );
 
-#done
 $router->addRoute(
     method: 'POST', 
     path: '/login', 
@@ -346,13 +370,52 @@ $router->addRoute(
     loginCallback: true
 );
 
-#done
 $router->addRoute(
     method: 'GET', 
     path: '/logout', 
     callback: [$loginController, 'logout'],
     permissionCallback: true, 
     loginCallback: [$session, 'checkLogin']
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: 'console/{consoleId}/info',
+    callback: [$consoleApiController, 'getConsoleInfo'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'POST',
+    path: '/console/{consoleId}/start-quiz',
+    callback: [$consoleApiController, 'startQuiz'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'POST',
+    path: '/console/{consoleId}/end-quiz',
+    callback: [$consoleApiController, 'endQuiz'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: '/console/{consoleId}/didPlayerLogin/{joinLink}',
+    callback: [$consoleApiController, 'didPlayerLogin'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: '/console/{consoleId}/quiz',
+    callback: [$consoleApiController, 'getQuiz'],
+    permissionCallback: true,
+    loginCallback: true,
 );
 
 $router->dispatch();

@@ -21,7 +21,17 @@ class PlayedQuizzes {
         $stmt->bindValue(':expoName', $expoName);
 
         try {
-            return $stmt->execute();
+            if ($stmt->execute()) {
+                $sql = "SELECT id FROM playedquizzes WHERE player = :player AND quiz = :quiz AND startedOn = :startedOn";
+                $idStmt = $this->db_conn->prepare($sql);
+                $idStmt->bindValue(':player', $player);
+                $idStmt->bindValue(':quiz', $quiz);
+                $idStmt->bindValue(':startedOn', $startedOn);
+                $idStmt->execute();
+                $result = $idStmt->fetch(PDO::FETCH_ASSOC);
+                return $result['id'] ?? false;
+            }
+            return false;
         } catch (PDOException $e) {
             return false;
         }
