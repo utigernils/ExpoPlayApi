@@ -130,8 +130,10 @@ class expoController {
         $endsOn = $jsonData['endsOn'];
         $location = $jsonData['location'];
         $isActive = isset($jsonData['isActive']) ? filter_var($jsonData['isActive'], FILTER_VALIDATE_BOOLEAN) : true;
+        $welcomeTitle = isset($jsonData['welcomeTitle']) ? $jsonData['welcomeTitle'] : null;
+        $welcomeSubtitle = isset($jsonData['welcomeSubtitle']) ? $jsonData['welcomeSubtitle'] : null;
     
-        $result = $this->expoModell->create(name: $name, startsOn: $startsOn, endsOn: $endsOn, location: $location, isActive: $isActive);
+        $result = $this->expoModell->create(name: $name, startsOn: $startsOn, endsOn: $endsOn, location: $location, isActive: $isActive, welcomeTitle: $welcomeTitle, welcomeSubtitle: $welcomeSubtitle);
     
         if ($result === false) {
             $this->response->error(message: 'Expo could not be created', responseCode: 500);

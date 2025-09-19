@@ -5,8 +5,8 @@ class Expo {
         $this->db_conn = $db_conn->getConnection();
     }
 
-    public function create($name, $isActive, $location = null, $startsOn = null, $endsOn = null ) {
-        $sql = "INSERT INTO expo (name, location, startsOn, endsOn, isActive) VALUES (:name, :location, :startsOn, :endsOn, :isActive)";
+    public function create($name, $isActive, $location = null, $startsOn = null, $endsOn = null, $welcomeTitle = null, $welcomeSubtitle = null ) {
+        $sql = "INSERT INTO expo (name, location, startsOn, endsOn, isActive, welcomeTitle, welcomeSubtitle) VALUES (:name, :location, :startsOn, :endsOn, :isActive, :welcomeTitle, :welcomeSubtitle)";
         $stmt = $this->db_conn->prepare($sql);
         
         $stmt->bindValue(':name', $name);
@@ -14,6 +14,8 @@ class Expo {
         $stmt->bindValue(':startsOn', $startsOn);
         $stmt->bindValue(':endsOn', $endsOn);
         $stmt->bindValue(':isActive', $isActive);
+        $stmt->bindValue(':welcomeTitle', $welcomeTitle);
+        $stmt->bindValue(':welcomeSubtitle', $welcomeSubtitle);
 
         try {
             return $stmt->execute();
@@ -23,7 +25,7 @@ class Expo {
     }
 
     public function get($id = null, $orderBy = null, $desc = false) {
-        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', null];
+        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', 'welcomeTitle', 'welcomeSubtitle', null];
         
         if (!in_array($orderBy, $allowedFields)) {
             return false;
@@ -53,7 +55,7 @@ class Expo {
     }
     
     public function set($id, $field, $value) {
-        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', null];
+        $allowedFields = ['name', 'location', 'startsOn', 'endsOn', 'isActive', 'welcomeTitle', 'welcomeSubtitle', null];
         
         if (!in_array($field, $allowedFields)) {
             return false;
