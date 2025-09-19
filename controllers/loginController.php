@@ -25,7 +25,7 @@ class loginController
 
 			$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-			echo json_encode(['state' => true, 'user' => $userId, 'isAdmin' => $user['isAdmin'] ]);
+			echo json_encode(['state' => true, 'user' => $userId, 'isAdmin' => $user['isAdmin'], 'email' => $user['email'], 'firstName' => $user['firstName'], 'lastName' => $user['lastName']]);
 		} else {
 			echo json_encode([
 				'state' => false

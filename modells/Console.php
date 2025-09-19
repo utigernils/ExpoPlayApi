@@ -29,7 +29,10 @@ class Console {
         }
 
         if (is_null($id)) {
-            $sql = "SELECT * FROM console";
+            $sql = "SELECT console.*, expo.name AS expoName, quiz.name AS quizName
+                    FROM console
+                    LEFT JOIN expo ON console.currentExpo = expo.id
+                    LEFT JOIN quiz ON console.currentQuiz = quiz.id";
 
             if (!is_null($orderBy)) {
                 $sql .= " ORDER BY " . $orderBy;

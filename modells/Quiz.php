@@ -43,6 +43,14 @@ class Quiz {
         $quizzes = array();
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            // Calculate total points for this quiz
+            $totalPointsSql = "SELECT SUM(pointMultiplier) as totalPoints FROM questions WHERE quiz = :quiz_id AND isActive = 1";
+            $totalPointsStmt = $this->db_conn->prepare($totalPointsSql);
+            $totalPointsStmt->bindValue(':quiz_id', $row['id']);
+            $totalPointsStmt->execute();
+            $totalPointsResult = $totalPointsStmt->fetch(PDO::FETCH_ASSOC);
+            
+            $row['totalPoints'] = $totalPointsResult['totalPoints'] ?? 0;
             $quizzes[] = $row;
         }
 

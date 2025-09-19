@@ -42,14 +42,16 @@ class questionController {
             $this->response->error(message:'No data provided', responseCode:400);
         }
         
-        if (!isset($jsonData['Question']) | !isset($jsonData['questionType'])) {
+        if (!isset($jsonData['question']) | !isset($jsonData['questionType'])) {
             $this->response->error(message:'Question and questionType are required', responseCode:400);
         }
 
-        $question = $jsonData['Question'];
+        $question = $jsonData['question'];
         $questionType = $jsonData['questionType'];
+        $answerPossibilities = $jsonData['answerPossibilities'] ?? null;
+        $pointMultiplier = $jsonData['pointMultiplier'] ?? 1;
 
-        $result = $this->questionModell->create($quizId, $question, $questionType);
+        $result = $this->questionModell->create($quizId, $question, $questionType, $isActive = true, $pointMultiplier, $answerPossibilities);
 
         if ($result === false) {
             $this->response->error(message:'Question could not be created', responseCode:500);
