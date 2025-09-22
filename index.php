@@ -29,6 +29,7 @@ $config = new Config(configPath:
 );
 
 
+
 $allowedOrigins = [
     'http://localhost:5173',
     'http://localhost',
@@ -78,6 +79,7 @@ $playerController = new playerController($session, $playerModell);
 $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
+
 
 $consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell, $playerModell, $questionsModell);
 

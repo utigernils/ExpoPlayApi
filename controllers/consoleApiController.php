@@ -12,6 +12,7 @@ class consoleApiController {
     private $playerModell;
     private $response;
 
+
     public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell, $playerDataModell, $questionDataModell) {
         $this->session = $session;
         $this->consoleModell = $consoleDataModell;

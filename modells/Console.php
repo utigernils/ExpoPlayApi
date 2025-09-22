@@ -15,7 +15,10 @@ class Console {
         $stmt->bindValue(':isActive', $isActive);
 
         try {
-            return $stmt->execute();
+            if ($stmt->execute()) {
+                return $this->db_conn->lastInsertId();
+            }
+            return false;
         } catch (PDOException $e) {
             return false;
         }
