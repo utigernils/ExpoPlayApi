@@ -28,11 +28,26 @@ $config = new Config(configPath:
     'config.ini'
 );
 
-if ($config->get('mode') === 'development') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+
+$allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost',
+    'https://expoplay.utigernils.ch',
+    'https://expoplaydashboard.utigernils.ch',
+    'http://localhost:4200',
+    'https://editor.swagger.io'
+    // Do NOT include '*'
+];
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+    if (in_array($origin, $allowedOrigins)) {
+        header("Access-Control-Allow-Origin: $origin");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    }
 }
 
 $router = new Router(
@@ -65,7 +80,8 @@ $questionController = new questionController($session, $questionsModell);
 $quizController = new quizController($session, $quizModell);
 $userController = new userController($session, $dashboardUserModell);
 
-$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell, $playerModell);
+
+$consoleApiController = new consoleApiController($session, $consoleModell, $quizModell, $expoModell, $playedQuizzesModell, $playerModell, $questionsModell);
 
 $loginController = new loginController($session, $db);
 
@@ -392,6 +408,14 @@ $router->addRoute(
     method: 'GET',
     path: '/console/{consoleId}/didPlayerLogin/{joinLink}',
     callback: [$consoleApiController, 'didPlayerLogin'],
+    permissionCallback: true,
+    loginCallback: true,
+);
+
+$router->addRoute(
+    method: 'GET',
+    path: '/console/{consoleId}/quiz',
+    callback: [$consoleApiController, 'getQuiz'],
     permissionCallback: true,
     loginCallback: true,
 );

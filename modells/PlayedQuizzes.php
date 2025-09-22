@@ -45,13 +45,15 @@ class PlayedQuizzes {
         }
 
         if (is_null($id)) {
-            $sql = "SELECT * FROM playedquizzes";
+            $sql = "SELECT pq.*, CONCAT(p.firstName, ' ', p.lastName) AS playerName 
+                FROM playedquizzes pq 
+                LEFT JOIN player p ON pq.player = p.id";
 
             if (!is_null($orderBy)) {
-                $sql .= " ORDER BY " . $orderBy;
-                if ($desc) {
-                    $sql .= " DESC";
-                }
+            $sql .= " ORDER BY pq." . $orderBy;
+            if ($desc) {
+                $sql .= " DESC";
+            }
             }
         } else {
             $sql = "SELECT * FROM playedquizzes WHERE id = '$id'";
@@ -61,6 +63,14 @@ class PlayedQuizzes {
         $playedquizzes = array();
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            // Calculate total possible points for this quiz
+            $totalPointsSql = "SELECT SUM(pointMultiplier) as totalPoints FROM questions WHERE quiz = :quiz_id AND isActive = 1";
+            $totalPointsStmt = $this->db_conn->prepare($totalPointsSql);
+            $totalPointsStmt->bindValue(':quiz_id', $row['quiz']);
+            $totalPointsStmt->execute();
+            $totalPointsResult = $totalPointsStmt->fetch(PDO::FETCH_ASSOC);
+            
+            $row['totalPoints'] = $totalPointsResult['totalPoints'] ?? 0;
             $playedquizzes[] = $row;
         }
 

@@ -6,15 +6,18 @@ class consoleApiController {
     private $session;
     private $consoleModell; 
     private $quizModell;
+    private $questionModell;
     private $expoModell;
     private $playedQuizzesModell;
     private $playerModell;
     private $response;
 
-    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell, $playerDataModell) {
+
+    public function __construct($session, $consoleDataModell, $quizDataModell, $expoDataModell, $playedQuizzesDataModell, $playerDataModell, $questionDataModell) {
         $this->session = $session;
         $this->consoleModell = $consoleDataModell;
         $this->quizModell = $quizDataModell;
+        $this->questionModell = $questionDataModell;
         $this->expoModell = $expoDataModell;
         $this->playerModell = $playerDataModell;
         $this->playedQuizzesModell = $playedQuizzesDataModell;
@@ -101,7 +104,7 @@ class consoleApiController {
         $this->checkConsoleId($consoleId);
         $postData = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($postData['id'], $postData['endedOn'], $postData['correctAnswers'], $postData['wrongAnswers'])) {
+        if (!isset($postData['id'], $postData['endedOn'], $postData['correctAnswers'])) {
             $this->response->error(message: 'Missing required fields', responseCode: 400);
         }
 
@@ -117,11 +120,9 @@ class consoleApiController {
 
         $endedOn = $postData['endedOn'];
         $correctAnswers = $postData['correctAnswers'];
-        $wrongAnswers = $postData['wrongAnswers'];
-
+        
         $result = $this->playedQuizzesModell->set($id, 'endedOn', $endedOn);
         $result &= $this->playedQuizzesModell->set($id, 'correctAnswers', $correctAnswers);
-        $result &= $this->playedQuizzesModell->set($id, 'wrongAnswers', $wrongAnswers);
 
         if ($result) {
             $this->response->message(message: 'Quiz ended successfully', responseCode: 200);
@@ -141,5 +142,23 @@ class consoleApiController {
             $this->response->message(message: $player, responseCode: 200);
         }
         
+    }
+
+    public function getQuiz($consoleId) {
+        $this->checkConsoleId($consoleId);
+
+        $console = $this->consoleModell->get($consoleId)[0];
+        $quizId = $console['currentQuiz'];
+
+        $questions = $this->questionModell->get($quizId);
+
+        if (!empty($questions)) {
+            echo json_encode($questions);
+
+            $this->response->setHeader(201);
+            exit();
+        } else {
+            $this->response->error(message: 'Failed to get questions', responseCode: 500);
+        }
     }
 }

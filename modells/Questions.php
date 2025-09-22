@@ -55,8 +55,8 @@ class Questions {
     }
 
     public function set($id, $field, $value) {
-        $allowedFields = ['quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities', null];
-        
+        $allowedFields = ['question', 'quiz', 'isActive', 'questionType', 'pointMultiplier', 'answerPossibilities', null];
+
         if (!in_array($field, $allowedFields)) {
             return false;
         }
