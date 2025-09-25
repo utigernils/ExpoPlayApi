@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreQuizRequest;
+use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class QuizController extends Controller
         return Quiz::all();
     }
 
-    public function store(Request $request)
+    public function store(StoreQuizRequest $request)
     {
-        return Quiz::create($request->all());
+        return Quiz::create($request->validated());
     }
 
     public function show(Quiz $Quiz)
@@ -22,9 +24,9 @@ class QuizController extends Controller
         return $Quiz;
     }
 
-    public function update(Request $request, Quiz $Quiz)
+    public function update(UpdateQuizRequest $request, Quiz $Quiz)
     {
-        $Quiz->update($request->all());
+        $Quiz->update($request->validated());
         return $Quiz;
     }
 

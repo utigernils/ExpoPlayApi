@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePlayedQuizRequest;
 use App\Models\PlayedQuiz;
 use Illuminate\Http\Request;
 

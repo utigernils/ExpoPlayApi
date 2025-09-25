@@ -23,7 +23,7 @@ class PlayedQuizFactory extends Factory
         $endedOn = fake()->optional(0.9)->dateTimeBetween($startedOn, 'now'); // 90% are completed
         
         $maxPoints = fake()->numberBetween(50, 500);
-        $points = $endedOn ? fake()->numberBetween(0, $maxPoints) : null;
+        $points = $endedOn ? fake()->numberBetween(0, $maxPoints) : 0;
 
         return [
             'player_id' => Player::factory(),
@@ -60,7 +60,7 @@ class PlayedQuizFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'ended_on' => null,
-            'points' => null,
+            'points' => 0,
         ]);
     }
 

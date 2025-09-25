@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreExpoRequest;
+use App\Http\Requests\UpdateExpoRequest;
 use App\Models\Expo;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class ExpoController extends Controller
         return Expo::all();
     }
 
-    public function store(Request $request)
+    public function store(StoreExpoRequest $request)
     {
-        return Expo::create($request->all());
+        return Expo::create($request->validated());
     }
 
     public function show(Expo $Expo)
@@ -22,9 +24,9 @@ class ExpoController extends Controller
         return $Expo;
     }
 
-    public function update(Request $request, Expo $Expo)
+    public function update(UpdateExpoRequest $request, Expo $Expo)
     {
-        $Expo->update($request->all());
+        $Expo->update($request->validated());
         return $Expo;
     }
 

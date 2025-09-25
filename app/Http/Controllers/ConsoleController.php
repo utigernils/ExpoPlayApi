@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreConsoleRequest;
+use App\Http\Requests\UpdateConsoleRequest;
 use App\Models\Console;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class ConsoleController extends Controller
         return Console::all();
     }
 
-    public function store(Request $request)
+    public function store(StoreConsoleRequest $request)
     {
-        return Console::create($request->all());
+        return Console::create($request->validated());
     }
 
     public function show(Console $Console)
@@ -22,9 +24,9 @@ class ConsoleController extends Controller
         return $Console;
     }
 
-    public function update(Request $request, Console $Console)
+    public function update(UpdateConsoleRequest $request, Console $Console)
     {
-        $Console->update($request->all());
+        $Console->update($request->validated());
         return $Console;
     }
 

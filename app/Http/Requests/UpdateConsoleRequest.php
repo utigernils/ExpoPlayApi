@@ -22,7 +22,7 @@ class UpdateConsoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'api_token' => 'sometimes|string|unique:consoles,api_token,' . $this->route('Console')->id,
+            'api_token' => 'sometimes|string|unique:consoles,api_token,',
             'current_expo_id' => 'sometimes|nullable|integer|exists:expos,id',
             'current_quiz_id' => 'sometimes|nullable|integer|exists:quizzes,id',
             'name' => 'sometimes|string|max:100',

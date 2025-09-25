@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePlayerRequest;
 use App\Models\Player;
 use Illuminate\Http\Request;
 

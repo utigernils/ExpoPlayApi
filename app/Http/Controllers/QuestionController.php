@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreQuestionRequest;
+use App\Http\Requests\UpdateQuestionRequest;
 use App\Models\Question;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,9 @@ class QuestionController extends Controller
         return Question::all();
     }
 
-    public function store(Request $request)
+    public function store(StoreQuestionRequest $request)
     {
-        return Question::create($request->all());
+        return Question::create($request->validated());
     }
 
     public function show(Question $Question)
@@ -22,9 +24,9 @@ class QuestionController extends Controller
         return $Question;
     }
 
-    public function update(Request $request, Question $Question)
+    public function update(UpdateQuestionRequest $request, Question $Question)
     {
-        $Question->update($request->all());
+        $Question->update($request->validated());
         return $Question;
     }
 
