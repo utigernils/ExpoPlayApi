@@ -18,7 +18,7 @@ class QuizController extends Controller
     }
 
     public function show(Quiz $Quiz)
-    {
+    {        
         return $Quiz;
     }
 
@@ -32,5 +32,10 @@ class QuizController extends Controller
     {
         $Quiz->delete();
         return response()->noContent();
+    }
+
+    public function questions(Quiz $quiz)
+    {
+        return $quiz->questions()->get();
     }
 }

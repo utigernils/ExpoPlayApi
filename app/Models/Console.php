@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Console extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'current_expo_id',
         'current_quiz_id',
