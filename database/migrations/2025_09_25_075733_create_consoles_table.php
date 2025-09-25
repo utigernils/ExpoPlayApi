@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('consoles', function (Blueprint $table) {
             $table->id();
+            $table->string('api_token')->unique();
             $table->foreignId('current_expo_id')->nullable()->constrained('expos');
             $table->foreignId('current_quiz_id')->nullable()->constrained('quizzes');
-            $table->string('name', 100)->nullable();
+            $table->string('name', 100);
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

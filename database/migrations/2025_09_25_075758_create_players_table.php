@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('players', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 50)->nullable();
-            $table->string('last_name', 50)->nullable();
-            $table->string('email', 320)->unique()->nullable();
+            $table->string('first_name', 50);
+            $table->string('last_name', 50);
+            $table->string('email', 320)->unique();
             $table->boolean('wants_newsletter')->default(false);
             $table->timestamps();
         });

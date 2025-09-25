@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('expos', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->nullable();
-            $table->string('introduction_title');
+            $table->string('name', 100);
+            $table->string('introduction_title')->nullable();
             $table->text('introduction_subtitle')->nullable();
-            $table->string('location', 150)->nullable();
-            $table->date('starts_on')->nullable();
-            $table->date('ends_on')->nullable();
+            $table->string('location', 150);
+            $table->date('starts_on');
+            $table->date('ends_on');
             $table->timestamps();
         });
     }

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->foreignId('expo_id')->nullable()->constrained('expos');
             $table->timestamp('started_on')->useCurrent();
             $table->timestamp('ended_on')->nullable();
-            $table->integer('points')->nullable();
-            $table->integer('quiz_max_points')->nullable();
-            $table->string('quiz_name', 100)->nullable();
-            $table->string('expo_name', 100)->nullable();
+            $table->integer('points');
+            $table->integer('quiz_max_points');
+            $table->string('quiz_name', 100);
+            $table->string('expo_name', 100);
             $table->timestamps();
         });
     }

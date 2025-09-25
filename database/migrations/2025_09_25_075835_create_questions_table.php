@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->nullable()->constrained('quizzes');
-            $table->string('question', 150)->nullable();
-            $table->tinyInteger('question_type')->nullable();
-            $table->json('answer_possibilities')->nullable();
-            $table->tinyInteger('points')->nullable();
+            $table->foreignId('quiz_id')->constrained('quizzes');
+            $table->string('question', 150);
+            $table->tinyInteger('question_type');
+            $table->json('answer_possibilities');
+            $table->tinyInteger('points');
             $table->boolean('is_hidden')->default(false);
             $table->timestamps();
         });
