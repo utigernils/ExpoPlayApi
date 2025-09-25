@@ -14,7 +14,10 @@ class PlayerController extends Controller
 
     public function store(Request $request)
     {
-        return Player::create($request->all());
+        return response()->json([
+            'message' => 'Player records cannot be created.',
+            'error' => 'Method not allowed'
+        ], 405);
     }
 
     public function show(Player $Player)
@@ -24,8 +27,10 @@ class PlayerController extends Controller
 
     public function update(Request $request, Player $Player)
     {
-        $Player->update($request->all());
-        return $Player;
+        return response()->json([
+            'message' => 'Player records cannot be updated once created.',
+            'error' => 'Method not allowed'
+        ], 405);
     }
 
     public function destroy(Player $Player)

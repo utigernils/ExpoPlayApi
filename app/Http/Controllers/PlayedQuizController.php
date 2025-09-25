@@ -14,7 +14,10 @@ class PlayedQuizController extends Controller
 
     public function store(Request $request)
     {
-        return PlayedQuiz::create($request->all());
+        return response()->json([
+            'message' => 'PlayedQuiz records cannot be created.',
+            'error' => 'Method not allowed'
+        ], 405);
     }
 
     public function show(PlayedQuiz $PlayedQuiz)
@@ -24,8 +27,10 @@ class PlayedQuizController extends Controller
 
     public function update(Request $request, PlayedQuiz $PlayedQuiz)
     {
-        $PlayedQuiz->update($request->all());
-        return $PlayedQuiz;
+        return response()->json([
+            'message' => 'PlayedQuiz records cannot be updated once created.',
+            'error' => 'Method not allowed'
+        ], 405);
     }
 
     public function destroy(PlayedQuiz $PlayedQuiz)
