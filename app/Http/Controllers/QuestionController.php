@@ -33,4 +33,9 @@ class QuestionController extends Controller
         $Question->delete();
         return response()->noContent();
     }
+
+    public function quiz(Question $Question)
+    {
+        return $Question->quiz()->first();
+    }
 }

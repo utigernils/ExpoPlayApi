@@ -33,4 +33,14 @@ class ConsoleController extends Controller
         $Console->delete();
         return response()->noContent();
     }
+
+    public function currentExpo(Console $Console)
+    {
+        return $Console->currentExpo()->first();
+    }
+
+    public function currentQuiz(Console $Console)
+    {
+        return $Console->currentQuiz()->first();
+    }
 }

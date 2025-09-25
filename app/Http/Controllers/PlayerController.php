@@ -38,4 +38,9 @@ class PlayerController extends Controller
         $Player->delete();
         return response()->noContent();
     }
+
+    public function playedQuizzes(Player $Player)
+    {
+        return $Player->playedQuizzes()->get();
+    }
 }

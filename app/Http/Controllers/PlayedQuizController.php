@@ -38,4 +38,19 @@ class PlayedQuizController extends Controller
         $PlayedQuiz->delete();
         return response()->noContent();
     }
+
+    public function player(PlayedQuiz $PlayedQuiz)
+    {
+        return $PlayedQuiz->player()->first();
+    }
+
+    public function quiz(PlayedQuiz $PlayedQuiz)
+    {
+        return $PlayedQuiz->quiz()->first();
+    }
+
+    public function expo(PlayedQuiz $PlayedQuiz)
+    {
+        return $PlayedQuiz->expo()->first();
+    }
 }

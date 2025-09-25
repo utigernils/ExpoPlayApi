@@ -33,4 +33,14 @@ class ExpoController extends Controller
         $Expo->delete();
         return response()->noContent();
     }
+
+    public function consoles(Expo $Expo)
+    {
+        return $Expo->consoles()->get();
+    }
+
+    public function playedQuizzes(Expo $Expo)
+    {
+        return $Expo->playedQuizzes()->get();
+    }
 }

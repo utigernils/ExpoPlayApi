@@ -34,8 +34,18 @@ class QuizController extends Controller
         return response()->noContent();
     }
 
-    public function questions(Quiz $quiz)
+    public function questions(Quiz $Quiz)
     {
-        return $quiz->questions()->get();
+        return $Quiz->questions()->get();
+    }
+
+    public function playedQuizzes(Quiz $Quiz)
+    {
+        return $Quiz->playedQuizzes()->get();
+    }
+
+    public function consoles(Quiz $Quiz)
+    {
+        return $Quiz->consoles()->get();
     }
 }
