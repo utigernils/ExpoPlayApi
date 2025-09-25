@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Player::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return Player::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Player $player)
+    public function show(Player $Player)
     {
-        //
+        return $Player;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Player $player)
+    public function update(Request $request, Player $Player)
     {
-        //
+        $Player->update($request->all());
+        return $Player;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Player $player)
+    public function destroy(Player $Player)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Player $player)
-    {
-        //
+        $Player->delete();
+        return response()->noContent();
     }
 }

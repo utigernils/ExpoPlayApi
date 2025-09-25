@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Question::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return Question::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Question $question)
+    public function show(Question $Question)
     {
-        //
+        return $Question;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Question $question)
+    public function update(Request $request, Question $Question)
     {
-        //
+        $Question->update($request->all());
+        return $Question;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Question $question)
+    public function destroy(Question $Question)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Question $question)
-    {
-        //
+        $Question->delete();
+        return response()->noContent();
     }
 }

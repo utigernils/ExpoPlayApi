@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Quiz::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return Quiz::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Quiz $quiz)
+    public function show(Quiz $Quiz)
     {
-        //
+        return $Quiz;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Quiz $quiz)
+    public function update(Request $request, Quiz $Quiz)
     {
-        //
+        $Quiz->update($request->all());
+        return $Quiz;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Quiz $quiz)
+    public function destroy(Quiz $Quiz)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Quiz $quiz)
-    {
-        //
+        $Quiz->delete();
+        return response()->noContent();
     }
 }

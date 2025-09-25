@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class ExpoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Expo::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return Expo::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Expo $expo)
+    public function show(Expo $Expo)
     {
-        //
+        return $Expo;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Expo $expo)
+    public function update(Request $request, Expo $Expo)
     {
-        //
+        $Expo->update($request->all());
+        return $Expo;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Expo $expo)
+    public function destroy(Expo $Expo)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Expo $expo)
-    {
-        //
+        $Expo->delete();
+        return response()->noContent();
     }
 }

@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class ConsoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return Console::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return Console::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Console $console)
+    public function show(Console $Console)
     {
-        //
+        return $Console;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Console $console)
+    public function update(Request $request, Console $Console)
     {
-        //
+        $Console->update($request->all());
+        return $Console;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Console $console)
+    public function destroy(Console $Console)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Console $console)
-    {
-        //
+        $Console->delete();
+        return response()->noContent();
     }
 }

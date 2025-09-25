@@ -7,59 +7,30 @@ use Illuminate\Http\Request;
 
 class PlayedQuizController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+        public function index()
     {
-        //
+        return PlayedQuiz::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        return PlayedQuiz::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PlayedQuiz $playedQuiz)
+    public function show(PlayedQuiz $PlayedQuiz)
     {
-        //
+        return $PlayedQuiz;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PlayedQuiz $playedQuiz)
+    public function update(Request $request, PlayedQuiz $PlayedQuiz)
     {
-        //
+        $PlayedQuiz->update($request->all());
+        return $PlayedQuiz;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PlayedQuiz $playedQuiz)
+    public function destroy(PlayedQuiz $PlayedQuiz)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PlayedQuiz $playedQuiz)
-    {
-        //
+        $PlayedQuiz->delete();
+        return response()->noContent();
     }
 }
