@@ -31,7 +31,7 @@ class ExpoController extends Controller
     public function destroy(Expo $Expo)
     {
         $Expo->delete();
-        return response()->noContent();
+        return response()->json(["message"=> "Expo deleted successfully"], 200);
     }
 
     public function consoles(Expo $Expo)

@@ -31,7 +31,7 @@ class QuizController extends Controller
     public function destroy(Quiz $Quiz)
     {
         $Quiz->delete();
-        return response()->noContent();
+        return response()->json(["message"=> "Quiz deleted successfully"], 200);
     }
 
     public function questions(Quiz $Quiz)

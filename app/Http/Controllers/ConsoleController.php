@@ -31,7 +31,7 @@ class ConsoleController extends Controller
     public function destroy(Console $Console)
     {
         $Console->delete();
-        return response()->noContent();
+        return response()->json(["message"=> "Console deleted successfully"], 200);
     }
 
     public function currentExpo(Console $Console)

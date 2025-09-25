@@ -36,7 +36,7 @@ class PlayedQuizController extends Controller
     public function destroy(PlayedQuiz $PlayedQuiz)
     {
         $PlayedQuiz->delete();
-        return response()->noContent();
+        return response()->json(["message"=> "PlayedQuiz deleted successfully"], 200);
     }
 
     public function player(PlayedQuiz $PlayedQuiz)

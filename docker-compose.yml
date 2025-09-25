@@ -15,25 +15,32 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
 
-  app:
-    image: webdevops/php-nginx:8.3
-    container_name: ExpoPlay_app
-    restart: unless-stopped
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-    ports:
-      - "8000:80"
-    depends_on:
-      - mariadb
-    environment:
-      DB_HOST: mariadb
-      DB_DATABASE: ExpoPlay_entw
-      DB_USERNAME: laravel
-      DB_PASSWORD: laravelpass
-      WEB_DOCUMENT_ROOT: /var/www/html/public
-      PHP_DISPLAY_ERRORS: 1
-      PHP_MEMORY_LIMIT: 512M
+
+  # app:
+  #   image: webdevops/php-nginx:8.3
+  #   container_name: ExpoPlay_app
+  #   restart: unless-stopped
+  #   working_dir: /var/www/html
+  #   volumes:
+  #     - ./:/var/www/html
+  #   ports:
+  #     - "8000:80"
+  #   depends_on:
+  #     - mariadb
+  #   environment:
+  #     DB_HOST: mariadb
+  #     DB_DATABASE: ExpoPlay_entw
+  #     DB_USERNAME: laravel
+  #     DB_PASSWORD: laravelpass
+  #     WEB_DOCUMENT_ROOT: /var/www/html/public
+  #     PHP_DISPLAY_ERRORS: 1
+  #     PHP_MEMORY_LIMIT: 512M
+  #   command: >
+  #     sh -c "
+  #       chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache &&
+  #       chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache &&
+  #       supervisord -n
+  #     "
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest

@@ -36,7 +36,7 @@ class PlayerController extends Controller
     public function destroy(Player $Player)
     {
         $Player->delete();
-        return response()->noContent();
+        return response()->json(["message"=> "Player deleted successfully"], 200);
     }
 
     public function playedQuizzes(Player $Player)
