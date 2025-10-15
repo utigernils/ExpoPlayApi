@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
+use App\Http\Resources\QuestionResource;
+use App\Http\Resources\QuizResource;
 use App\Models\Question;
 use Illuminate\Http\Request;
 
@@ -11,23 +13,23 @@ class QuestionController extends Controller
 {
     public function index()
     {
-        return Question::all();
+        return QuestionResource::collection(Question::all());
     }
 
     public function store(StoreQuestionRequest $request)
     {
-        return Question::create($request->validated());
+        return new QuestionResource(Question::create($request->validated()));
     }
 
     public function show(Question $Question)
     {
-        return $Question;
+        return new QuestionResource($Question);
     }
 
     public function update(UpdateQuestionRequest $request, Question $Question)
     {
         $Question->update($request->validated());
-        return $Question;
+        return new QuestionResource($Question);
     }
 
     public function destroy(Question $Question)
@@ -38,6 +40,6 @@ class QuestionController extends Controller
 
     public function quiz(Question $Question)
     {
-        return $Question->quiz()->first();
+        return new QuizResource($Question->quiz()->first());
     }
 }

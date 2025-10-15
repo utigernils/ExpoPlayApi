@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('consoles', function (Blueprint $table) {
             $table->id();
-            $table->char('api_token', 36)->default(new Expression('(UUID())'));
+            $table->char('api_token', 36)->unique()->default(new Expression('(UUID())'));
             $table->foreignId('current_expo_id')->nullable()->constrained('expos');
             $table->foreignId('current_quiz_id')->nullable()->constrained('quizzes');
             $table->string('name', 100);

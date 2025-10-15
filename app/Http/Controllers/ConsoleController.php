@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreConsoleRequest;
 use App\Http\Requests\UpdateConsoleRequest;
+use App\Http\Resources\ConsoleResource;
+use App\Http\Resources\ExpoResource;
+use App\Http\Resources\QuizResource;
 use App\Models\Console;
 use Illuminate\Http\Request;
 
@@ -11,23 +14,23 @@ class ConsoleController extends Controller
 {
     public function index()
     {
-        return Console::all();
+        return ConsoleResource::collection(Console::all());
     }
 
     public function store(StoreConsoleRequest $request)
     {
-        return Console::create($request->validated());
+        return new ConsoleResource(Console::create($request->validated()));
     }
 
     public function show(Console $Console)
     {
-        return $Console;
+        return new ConsoleResource($Console);
     }
 
     public function update(UpdateConsoleRequest $request, Console $Console)
     {
         $Console->update($request->validated());
-        return $Console;
+        return new ConsoleResource($Console);
     }
 
     public function destroy(Console $Console)
@@ -38,11 +41,11 @@ class ConsoleController extends Controller
 
     public function currentExpo(Console $Console)
     {
-        return $Console->currentExpo()->first();
+        return new ExpoResource($Console->currentExpo()->first());
     }
 
     public function currentQuiz(Console $Console)
     {
-        return $Console->currentQuiz()->first();
+        return new QuizResource($Console->currentQuiz()->first());
     }
 }

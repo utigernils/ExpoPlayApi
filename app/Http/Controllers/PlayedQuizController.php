@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePlayedQuizRequest;
+use App\Http\Resources\PlayedQuizResource;
+use App\Http\Resources\PlayerResource;
+use App\Http\Resources\QuizResource;
+use App\Http\Resources\ExpoResource;
 use App\Models\PlayedQuiz;
 use Illuminate\Http\Request;
 
@@ -10,7 +14,7 @@ class PlayedQuizController extends Controller
 {
         public function index()
     {
-        return PlayedQuiz::all();
+        return PlayedQuizResource::collection(PlayedQuiz::all());
     }
 
     public function store(Request $request)
@@ -23,7 +27,7 @@ class PlayedQuizController extends Controller
 
     public function show(PlayedQuiz $PlayedQuiz)
     {
-        return $PlayedQuiz;
+        return new PlayedQuizResource($PlayedQuiz);
     }
 
     public function update(Request $request, PlayedQuiz $PlayedQuiz)
@@ -42,16 +46,16 @@ class PlayedQuizController extends Controller
 
     public function player(PlayedQuiz $PlayedQuiz)
     {
-        return $PlayedQuiz->player()->first();
+        return new PlayerResource($PlayedQuiz->player()->first());
     }
 
     public function quiz(PlayedQuiz $PlayedQuiz)
     {
-        return $PlayedQuiz->quiz()->first();
+        return new QuizResource($PlayedQuiz->quiz()->first());
     }
 
     public function expo(PlayedQuiz $PlayedQuiz)
     {
-        return $PlayedQuiz->expo()->first();
+        return new ExpoResource($PlayedQuiz->expo()->first());
     }
 }

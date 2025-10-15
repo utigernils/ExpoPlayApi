@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePlayerRequest;
+use App\Http\Resources\PlayerResource;
+use App\Http\Resources\PlayedQuizResource;
 use App\Models\Player;
 use Illuminate\Http\Request;
 
@@ -10,7 +12,7 @@ class PlayerController extends Controller
 {
     public function index()
     {
-        return Player::all();
+        return PlayerResource::collection(Player::all());
     }
 
     public function store(Request $request)
@@ -23,7 +25,7 @@ class PlayerController extends Controller
 
     public function show(Player $Player)
     {
-        return $Player;
+        return new PlayerResource($Player);
     }
 
     public function update(Request $request, Player $Player)
@@ -42,6 +44,6 @@ class PlayerController extends Controller
 
     public function playedQuizzes(Player $Player)
     {
-        return $Player->playedQuizzes()->get();
+        return new PlayedQuizResource($Player->playedQuizzes()->get());
     }
 }

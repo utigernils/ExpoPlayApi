@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreExpoRequest;
 use App\Http\Requests\UpdateExpoRequest;
+use App\Http\Resources\ExpoResource;
 use App\Models\Expo;
 use Illuminate\Http\Request;
 
@@ -11,23 +12,23 @@ class ExpoController extends Controller
 {
     public function index()
     {
-        return Expo::all();
+        return ExpoResource::collection(Expo::all() );
     }
 
     public function store(StoreExpoRequest $request)
     {
-        return Expo::create($request->validated());
+        return new ExpoResource(Expo::create($request->validated()));
     }
 
     public function show(Expo $Expo)
     {
-        return $Expo;
+        return new ExpoResource($Expo);
     }
 
     public function update(UpdateExpoRequest $request, Expo $Expo)
     {
         $Expo->update($request->validated());
-        return $Expo;
+        return new ExpoResource($Expo);
     }
 
     public function destroy(Expo $Expo)
