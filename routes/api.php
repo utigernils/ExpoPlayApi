@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\NeedsAdminRights;
 
 use App\Http\Controllers\{
     AuthController,
@@ -14,17 +15,17 @@ use App\Http\Controllers\{
 };
 
 // Public authentication routes
-Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Authentication routes
+    Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('logout-all', [AuthController::class, 'logoutAll']);
     Route::get('user', [AuthController::class, 'user']);
 
-    // API Resources
+    // API Resources (admin only)
     Route::apiResources([
         'players' => PlayerController::class,
         'expos' => ExpoController::class,
