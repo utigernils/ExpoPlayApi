@@ -12,7 +12,8 @@ use App\Http\Controllers\{
     QuizController,
     ConsoleController,
     PlayedQuizController,
-    QuestionController
+    QuestionController,
+    ConsoleApiController
 };
 
 // Public authentication routes
@@ -67,3 +68,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //Player routes
 Route::post('players/join', [PlayerController::class, 'join']);
+
+//Console routes
+Route::get('console-api/check-player', [ConsoleApiController::class,'checkPlayer']);
+Route::get('console-api/info', [ConsoleApiController::class,'getConsoleInfo']);
+Route::get('console-api/quiz', [ConsoleApiController::class,'getQuizQuestions']);
+
+Route::post('console-api/start-quiz', [ConsoleApiController::class,'startQuiz']);
+Route::post('console-api/end-quiz', [ConsoleApiController::class,'endQuiz']);

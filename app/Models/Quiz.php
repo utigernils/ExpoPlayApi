@@ -33,4 +33,9 @@ class Quiz extends Model
     {
         return $this->hasMany(PlayedQuiz::class);
     }
+
+    public function totalPoints(): int
+    {
+        return $this->questions->sum('points');
+    }
 }

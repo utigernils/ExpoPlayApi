@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class QuizResource extends JsonResource
+class ConsoleInfoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,8 +14,11 @@ class QuizResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return array_merge(parent::toArray($request), [
-            'total_points' => $this->totalPoints(),
-        ]);
+        return [
+            'id'=> $this->id,
+            'name' => $this->name,
+            'current_quiz' => new QuizResource($this->currentQuiz),
+            'current_expo' => new ExpoResource($this->currentExpo),
+        ];
     }
 }
