@@ -20,7 +20,7 @@ Route::post('login', [AuthController::class, 'login']);
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Authentication routes
-    Route::post('register', [AuthController::class, 'register']);
+    Route::middleware(NeedsAdminRights::class)->post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('logout-all', [AuthController::class, 'logoutAll']);
     Route::get('user', [AuthController::class, 'user']);
