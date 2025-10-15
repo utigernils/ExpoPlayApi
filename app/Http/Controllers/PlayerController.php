@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePlayerRequest;
+use App\Http\Requests\PlayerJoinRequest;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\PlayedQuizResource;
 use App\Models\Player;
@@ -34,6 +34,22 @@ class PlayerController extends Controller
             'message' => 'Player records cannot be updated once created.',
             'error' => 'Method not allowed'
         ], 405);
+    }
+
+    public function join(PlayerJoinRequest $request)
+    {
+        $player = Player::firstWhere('email', $request->input('email'));
+
+        if (!$player) {
+            $player = Player::create($request->validated());
+        } else {
+            $player->update($request->validated());
+        }
+
+        return response()->json([
+            'message' => 'Player joined successfully.',
+            'error' => null
+        ], 200);
     }
 
     public function destroy(Player $Player)

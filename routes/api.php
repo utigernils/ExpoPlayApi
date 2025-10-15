@@ -64,3 +64,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('quizzes/{Quiz}/played-quizzes', [QuizController::class,'playedQuizzes']);
     Route::get('quizzes/{Quiz}/consoles', [QuizController::class,'consoles']);
 });
+
+//Player routes
+Route::post('players/join', [PlayerController::class, 'join']);
