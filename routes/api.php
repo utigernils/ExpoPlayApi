@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
+    AuthController,
     PlayerController,
     ExpoController,
     QuizController,
@@ -12,30 +13,43 @@ use App\Http\Controllers\{
     QuestionController
 };
 
-Route::apiResources([
-    'players' => PlayerController::class,
-    'expos' => ExpoController::class,
-    'quizzes' => QuizController::class,
-    'consoles' => ConsoleController::class,
-    'played-quizzes' => PlayedQuizController::class,
-    'questions' => QuestionController::class,
-]);
+// Public authentication routes
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    // Authentication routes
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('logout-all', [AuthController::class, 'logoutAll']);
+    Route::get('user', [AuthController::class, 'user']);
 
-Route::get('consoles/{Console}/current-expo', [ConsoleController::class, 'currentExpo']);
-Route::get('consoles/{Console}/current-quiz', [ConsoleController::class, 'currentQuiz']);
+    // API Resources
+    Route::apiResources([
+        'players' => PlayerController::class,
+        'expos' => ExpoController::class,
+        'quizzes' => QuizController::class,
+        'consoles' => ConsoleController::class,
+        'played-quizzes' => PlayedQuizController::class,
+        'questions' => QuestionController::class,
+    ]);
 
-Route::get('expos/{Expo}/consoles', [ExpoController::class, 'consoles']);
-Route::get('expos/{Expo}/played-quizzes', [ExpoController::class, 'playedQuizzes']);
+    // Custom routes
+    Route::get('consoles/{Console}/current-expo', [ConsoleController::class, 'currentExpo']);
+    Route::get('consoles/{Console}/current-quiz', [ConsoleController::class, 'currentQuiz']);
 
-Route::get('played-quizzes/{PlayedQuiz}/player', [PlayedQuizController::class, 'player']);
-Route::get('played-quizzes/{PlayedQuiz}/quiz', [PlayedQuizController::class, 'quiz']);
-Route::get('played-quizzes/{PlayedQuiz}/expo', [PlayedQuizController::class, 'expo']);
+    Route::get('expos/{Expo}/consoles', [ExpoController::class, 'consoles']);
+    Route::get('expos/{Expo}/played-quizzes', [ExpoController::class, 'playedQuizzes']);
 
-Route::get('players/{Player}/played-quizzes', [PlayerController::class, 'playedQuizzes']);
+    Route::get('played-quizzes/{PlayedQuiz}/player', [PlayedQuizController::class, 'player']);
+    Route::get('played-quizzes/{PlayedQuiz}/quiz', [PlayedQuizController::class, 'quiz']);
+    Route::get('played-quizzes/{PlayedQuiz}/expo', [PlayedQuizController::class, 'expo']);
 
-Route::get('questions/{Question}/quiz', [QuestionController::class,'quiz']);
+    Route::get('players/{Player}/played-quizzes', [PlayerController::class, 'playedQuizzes']);
 
-Route::get('quizzes/{Quiz}/questions', [QuizController::class,'questions']);
-Route::get('quizzes/{Quiz}/played-quizzes', [QuizController::class,'playedQuizzes']);
-Route::get('quizzes/{Quiz}/consoles', [QuizController::class,'consoles']);
+    Route::get('questions/{Question}/quiz', [QuestionController::class,'quiz']);
+
+    Route::get('quizzes/{Quiz}/questions', [QuizController::class,'questions']);
+    Route::get('quizzes/{Quiz}/played-quizzes', [QuizController::class,'playedQuizzes']);
+    Route::get('quizzes/{Quiz}/consoles', [QuizController::class,'consoles']);
+});
