@@ -21,6 +21,7 @@ class PlayerFactory extends Factory
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'wants_newsletter' => fake()->boolean(30), // 30% chance of wanting newsletter
+            'join_link' => fake()->uuid()
         ];
     }
 

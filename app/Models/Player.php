@@ -15,6 +15,7 @@ class Player extends Model
         'last_name',
         'email',
         'wants_newsletter',
+        'join_link',
     ];
 
     protected $casts = [

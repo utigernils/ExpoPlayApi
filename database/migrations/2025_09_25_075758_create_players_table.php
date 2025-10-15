@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('last_name', 50);
             $table->string('email', 320)->unique();
             $table->boolean('wants_newsletter')->default(false);
+            $table->string('join_link',36);
             $table->timestamps();
         });
     }
