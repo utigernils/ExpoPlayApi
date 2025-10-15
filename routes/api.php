@@ -6,6 +6,7 @@ use App\Http\Middleware\NeedsAdminRights;
 
 use App\Http\Controllers\{
     AuthController,
+    UserController,
     PlayerController,
     ExpoController,
     QuizController,
@@ -20,8 +21,8 @@ Route::post('login', [AuthController::class, 'login']);
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Authentication routes
-    Route::middleware(NeedsAdminRights::class)->post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::put('user', [AuthController::class, 'update']);
     Route::post('logout-all', [AuthController::class, 'logoutAll']);
     Route::get('user', [AuthController::class, 'user']);
 
@@ -34,6 +35,15 @@ Route::middleware('auth:sanctum')->group(function () {
         'played-quizzes' => PlayedQuizController::class,
         'questions' => QuestionController::class,
     ]);
+
+    // User managment routes
+    Route::middleware(NeedsAdminRights::class)->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::get('users', [UserController::class, 'index']);
+        Route::get('users/{user}', [UserController::class, 'show']);
+        Route::put('users/{user}', [UserController::class, 'update']);
+        Route::delete('users/{user}', [UserController::class, 'destroy']);
+    });
 
     // Custom routes
     Route::get('consoles/{Console}/current-expo', [ConsoleController::class, 'currentExpo']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,14 @@ class AuthController extends Controller
             'user' => new UserResource($user),
             'token' => $token,
         ], 201);
+    }
+
+    public function update(UserUpdateRequest $request) 
+    {
+        $user = Auth::user();
+        $user->update($request->validated());
+
+        return new UserResource($user);
     }
 
     public function login(LoginRequest $request)
