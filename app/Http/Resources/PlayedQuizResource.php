@@ -26,8 +26,8 @@ class PlayedQuizResource extends JsonResource
             $data['time'] = null;
         }
 
-        if (isset($data['points'])) {
-            $data['points_rate'] = round(($data['points'] / $data['quiz_max_points']) * 100, 2);
+        if (isset($data['points'], $data['quiz_max_points']) && (float)$data['quiz_max_points'] > 0) {
+            $data['points_rate'] = round(((float)$data['points'] / (float)$data['quiz_max_points']) * 100, 2);
         } else {
             $data['points_rate'] = null;
         }
