@@ -19,6 +19,15 @@ class Quiz extends Model
         'is_active' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::deleting(function ($quiz) {
+            $quiz->questions()->delete();
+            
+            $quiz->playedQuizzes()->update(['quiz_id' => null]);
+        });
+    }
+
     public function consoles(): HasMany
     {
         return $this->hasMany(Console::class, 'current_quiz_id');
