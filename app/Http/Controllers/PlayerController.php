@@ -60,6 +60,6 @@ class PlayerController extends Controller
 
     public function playedQuizzes(Player $Player)
     {
-        return new PlayedQuizResource($Player->playedQuizzes()->get());
+        return PlayedQuizResource::collection($Player->playedQuizzes()->get());
     }
 }
