@@ -32,6 +32,8 @@ class PlayedQuizResource extends JsonResource
             $data['points_rate'] = null;
         }
 
+        $data['player_name'] = $this->player->first_name . ' ' . $this->player->last_name;
+
         return $data;
     }
 }
