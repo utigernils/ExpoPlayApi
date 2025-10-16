@@ -22,7 +22,6 @@ class StoreConsoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'api_token' => 'required|string|unique:consoles,api_token',
             'current_expo_id' => 'nullable|integer|exists:expos,id',
             'current_quiz_id' => 'nullable|integer|exists:quizzes,id',
             'name' => 'required|string|max:100',
