@@ -10,6 +10,14 @@ class Expo extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::deleting(function ($expo) {
+            $expo->playedQuizzes()->update(['expo_id' => null]);
+            $expo->consoles()->update(['current_expo_id' => null]);
+        });
+    }
+
     protected $fillable = [
         'name',
         'introduction_title',

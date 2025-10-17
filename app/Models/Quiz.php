@@ -25,6 +25,7 @@ class Quiz extends Model
             $quiz->questions()->delete();
             
             $quiz->playedQuizzes()->update(['quiz_id' => null]);
+            $quiz->consoles()->update(['current_quiz_id' => null]);
         });
     }
 

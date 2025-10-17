@@ -10,6 +10,13 @@ class Player extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::deleting(function ($player) {
+            $player->playedQuizzes()->delete();
+        });
+    }
+
     protected $fillable = [
         'first_name',
         'last_name',
